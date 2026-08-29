@@ -1,0 +1,24 @@
+﻿@page "/power"
+@rendermode InteractiveServer
+
+<h1>Power</h1>
+<h4>Число:</h4>
+<input type="number" @bind="number"/>
+<h4>Степень:</h4>
+<input type="number" @bind="degree"/>
+<button @onclick="Exponentation"> Расчитать</button>
+<h4>Результат: @result</h4>
+@code 
+{
+	int number = 0;
+	int degree = 0;
+	int result = 0;
+	void Exponentation()
+	{
+		@for (var i = 0; i < degree; i++)
+		{
+			result = number * degree;
+		}
+	}
+}
+
