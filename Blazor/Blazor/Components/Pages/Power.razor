@@ -1,5 +1,6 @@
 ﻿@page "/power"
 @rendermode InteractiveServer
+@using System.Numerics;
 
 <h1>Power</h1>
 <h4>Число:</h4>
@@ -12,12 +13,13 @@
 {
 	int number = 0;
 	int degree = 0;
-	int result = 0;
+	double result = 0;
 	void Exponentation()
 	{
+		result = 1;
 		@for (var i = 0; i < degree; i++)
 		{
-			result = number * degree;
+			result *=  number;
 		}
 	}
 }
