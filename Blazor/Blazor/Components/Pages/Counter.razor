@@ -12,19 +12,5 @@
 <!--bootstrap - набор событий-->
 <button class="btn btn-primary" @onclick="Reset">Reset</button>
 
-@code 
-{
-    private int currentCount = 0;
-    int increment = 1;
-    /*поля в классе по умолчанию private*/
-
-    private void IncrementCount()
-    {
-        currentCount+=increment;
-    }
-    void Reset()
-    {
-        currentCount = 0;    
-    }
-}
+@code {}
 

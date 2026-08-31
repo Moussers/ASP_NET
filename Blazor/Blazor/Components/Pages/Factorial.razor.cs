@@ -13,5 +13,10 @@ namespace Blazor.Components.Pages
                 factorial *= i;
         }
         /*Обработчик событий всегда имеет тип: void*/
+        /*
+            Component.razor -       HTML-разметка;
+            Component.razor.cs -    C# класс;
+            Component.rzor.cs -     CSS-стили, применяемые в в этом компоненте;
+        */
     }
 }

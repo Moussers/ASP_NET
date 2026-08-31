@@ -1,0 +1,13 @@
+﻿@page "/power"
+@rendermode InteractiveServer
+@using System.Numerics;
+
+<h1>Power</h1>
+<h4>Число:</h4>
+<input type="number" @bind="number"/>
+<h4>Степень:</h4>
+<input type="number" @bind="degree"/>
+<button @onclick="Exponentiation"> Расчитать</button>
+<h4>Результат: @result</h4>
+@code {}
+

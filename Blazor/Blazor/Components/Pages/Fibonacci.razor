@@ -1,0 +1,11 @@
+﻿@page "/fibonacci"
+@rendermode InteractiveServer
+<h1>Числа Фибоначи</h1>
+
+<h4>Число</h4>
+<input type="number" @bind="a"/>
+<button @onclick="fibonacciFunction"> Расчитать</button>
+<h4>Результат: @res</h4>
+<!--<h4>Debug: @a</h4>-->
+
+@code {}
