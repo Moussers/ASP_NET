@@ -1,0 +1,15 @@
+﻿.factorial 
+{
+    display: flex;
+}
+
+    .factorial input 
+    {
+        width: 64px;
+    }
+    .factorial h3 
+    {
+        margin: 0px 16px;
+    }
+
+/* точка (.) - обозначает что это класс */
