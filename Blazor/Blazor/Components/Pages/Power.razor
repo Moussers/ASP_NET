@@ -13,13 +13,25 @@
 {
 	int number = 0;
 	int degree = 0;
+
 	double result = 0;
 	void Exponentation()
 	{
-		result = 1;
-		@for (var i = 0; i < degree; i++)
+		if (degree == 0)
 		{
-			result *=  number;
+			result = 1;
+		}
+		else
+		{
+			result = 1;
+			@for (var i = 0; i < degree; i++)
+			{
+				result *= number;
+			}
+			@for (var i = degree; i < 0; i++)
+			{
+					result /= number;
+			}
 		}
 	}
 }
