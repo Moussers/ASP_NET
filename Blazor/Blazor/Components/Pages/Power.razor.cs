@@ -16,11 +16,11 @@
             {
                 result = 1;
                 for(var i = 0; i < degree; i++)
-			{
+			    {
                     result *= number;
                 }
                 for(var i = degree; i < 0; i++)
-			{
+			    {
                     result /= number;
                 }
                 /*Отрицательная степень тогда мы делим одно число на другое.*/
