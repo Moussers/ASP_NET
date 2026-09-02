@@ -1,2 +1,26 @@
-﻿body {
+﻿table 
+{
+    margin: 5px;
+    border: solid 2px black;
+    border-collapse: collapse;
+}
+th, td
+{
+    border: solid 2px;
+}
+tbody td 
+{
+    text-align: left;
+}
+
+th
+{
+    font-weight: normal;
+    padding-right: 10px;
+}
+
+h3 
+{
+    margin-top: 12px;
+    margin-bottom: 18px;
 }
