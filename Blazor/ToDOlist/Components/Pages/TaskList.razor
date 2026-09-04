@@ -13,8 +13,11 @@
 	@foreach (TODOlist.Task task in list)
 	{
 		<li>
-			<input type="checkbox" @bind="@task.DONE" />
-			<span>@task.Description</span>
+			<input type="checkbox" @bind="@task.DONE" id="@task.Description"/>
+			<label for="@task.Description">
+				<span>@task.Description</span>
+				<span>@task.AssignTime</span>
+			</label>
 		</li>
 	}
 </ul>
@@ -33,7 +36,11 @@
 	{
 		if (!string.IsNullOrEmpty(description) && !string.IsNullOrWhiteSpace(description))
 		{
-			TODOlist.Task task = new TODOlist.Task { Description = description, DONE = false };
+			TODOlist.Task task = new TODOlist.Task 
+			{ 
+				Description = description,
+				DONE = false,
+				AssignTime = DateTime.Now};
 			if (!list.Contains(task)) 
 			{
 				list.Add(task);
