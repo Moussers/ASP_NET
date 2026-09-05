@@ -24,14 +24,19 @@
 
 @code 
 {
-	string description = "";		//RAII
+	string description = "";        //RAII - Resource Acquisition is Initialization (получение ресурса есть инициализация)
+									//Шаблон “Инициализация при получении ресурса” используется для управления доступом к некоему ресурсу.
+									//При этом инициализация объекта совмещается с его получением, а уничтожение – с обязательным 
+									//освобождением.
+									//Реализация шаблона должна гарантировать, что при уничтожении объекта ресурс будет освобожден. Причем 
+									//не зависимо от того, как закончился блок, в котором он используется: нормально, с ошибкой или по 
+									//исключению.
 	List<TODOlist.Task> list = 
 	[
 		new TODOlist.Task {Description = "Покормить кота" },
 		new TODOlist.Task {Description = "Полить цветы", DONE = true },
 		new TODOlist.Task {Description = "Сходить в магазин", DONE = true },
 	];
-	//List<TODOlist.Task> list = new List<TODOlist.Task>();
 	void AddTask()
 	{
 		if (!string.IsNullOrEmpty(description) && !string.IsNullOrWhiteSpace(description))
