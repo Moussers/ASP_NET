@@ -1,11 +1,16 @@
-﻿namespace Academy.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Academy.Models
 {
     public class Group
     {
-        public int Id { get; set; } 
-        public string GroupName { get; set; }
-        public string TypeLearning { get; set; }
-        public int LearningDays { get; set; }
-        public DateTime DateStart { get; set; }
+        [Key]
+        public int group_id { get; set; } 
+        public string? group_name { get; set; }
+        public byte? direction { get; set; }
+        //tinyint - byte
+        public byte? weekdays { get; set; }
+        public TimeOnly? start_time { get; set; }
+        public DateTime? start_date { get; set; }
     }
 }

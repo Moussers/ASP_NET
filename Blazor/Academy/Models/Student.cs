@@ -1,14 +1,19 @@
-﻿namespace Academy.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
+
+namespace Academy.Models
 {
-    class Student : Human
+    public class Student
     {
-        public int Group { get; set; }
-        public Student
-            (int id, string lastName, string firstName, string? middleName,
-            string birthDate, string email, string phone, int group
-            ) : base(id, lastName, firstName, middleName, birthDate, email, phone) 
-        {
-            Group = group;
-        }
+        [Key]
+        public int stud_id { get; set; }
+        public string last_name { get; set; }
+        public string first_name { get; set; }
+        public string? middle_name { get; set; }
+        public DateTime birth_date { get; set; }
+        public string? email { get; set; }
+        public string? phone { get; set; }
+        public byte[]? photo { get; set; }
+        public int? group { get; set; }
     }
 }

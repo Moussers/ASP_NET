@@ -1,0 +1,49 @@
+﻿@page "/student"
+
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+@inject IDbContextFactory<AcademyContext> DbAcademy
+
+<PageTitle>Student</PageTitle>
+<h3>Student</h3>
+
+@if (loading)
+{
+    <button type="button" @onclick="@LoadData">Загрузить данные</button>
+}
+else{
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Number phone</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Academy.Models.Student student in students) 
+            {
+                <tr>
+                    <th scope="row">@student.last_name @student.first_name @student.middle_name</th>
+                    <th scope="row">@student.phone</th>
+                    <th scope="row">@student.email</th>
+                </tr> 
+            }
+        </tbody>
+    </table>
+}
+@code 
+{
+    bool loading = true;
+    List<Academy.Models.Student> students = new List<Academy.Models.Student>();
+    private void LoadData()
+    {
+        using (var db = DbAcademy.CreateDbContext())
+        {
+            loading = true;
+            students = db.Students.ToList();    
+        }
+        loading = false;
+    }
+}
+

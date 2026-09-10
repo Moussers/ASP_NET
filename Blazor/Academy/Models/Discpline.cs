@@ -1,9 +1,12 @@
-﻿namespace Academy.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Academy.Models
 {
-    public class Discpline
+    public class Discipline
     {
-        public int DisciplineId { get; set; }
-        public string DisciplineName { get; set; }
-        public int NumberIfLessons { get; set; }
+        [Key]
+        public short discipline_id { get; set; }
+        public string? discipline_name { get; set; }
+        public byte number_of_lessons { get; set; }
     }
 }
