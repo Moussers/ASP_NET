@@ -1,4 +1,4 @@
-@page "/students/edit"
+@page "/studentss/edit"
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -8,9 +8,9 @@
 
 <h1>Edit</h1>
 
-<h2>Student</h2>
+<h2>Students</h2>
 <hr />
-@if (Student is null)
+@if (Students is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -18,51 +18,52 @@ else
 {
     <div class="row">
         <div class="col-md-4">
-            <EditForm method="post" Model="Student" OnValidSubmit="UpdateStudent" FormName="edit" Enhance>
+            <EditForm method="post" Model="Students" OnValidSubmit="UpdateStudents" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
-                <input type="hidden" name="Student.stud_id" value="@Student.stud_id" />
+                <input type="hidden" name="Students.stud_id" value="@Students.stud_id" />
                 <div class="mb-3">
                 <span class="text-danger">*</span>
                     <label for="last_name" class="form-label">last_name:</label>
-                    <InputText id="last_name" @bind-Value="Student.last_name" class="form-control" aria-required="true"/>
-                    <ValidationMessage For="() => Student.last_name" class="text-danger" />
+                    <InputText id="last_name" @bind-Value="Students.last_name" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Students.last_name" class="text-danger" />
                 </div>
                 <div class="mb-3">
                 <span class="text-danger">*</span>
                     <label for="first_name" class="form-label">first_name:</label>
-                    <InputText id="first_name" @bind-Value="Student.first_name" class="form-control" aria-required="true"/>
-                    <ValidationMessage For="() => Student.first_name" class="text-danger" />
+                    <InputText id="first_name" @bind-Value="Students.first_name" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Students.first_name" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="middle_name" class="form-label">middle_name:</label>
-                    <InputText id="middle_name" @bind-Value="Student.middle_name" class="form-control" />
-                    <ValidationMessage For="() => Student.middle_name" class="text-danger" />
+                    <InputText id="middle_name" @bind-Value="Students.middle_name" class="form-control" />
+                    <ValidationMessage For="() => Students.middle_name" class="text-danger" />
                 </div>
                 <div class="mb-3">
+                <span class="text-danger">*</span>
                     <label for="birth_date" class="form-label">birth_date:</label>
-                    <InputDate id="birth_date" @bind-Value="Student.birth_date" class="form-control" />
-                    <ValidationMessage For="() => Student.birth_date" class="text-danger" />
+                    <InputDate id="birth_date" @bind-Value="Students.birth_date" class="form-control" aria-required="true"/>
+                    <ValidationMessage For="() => Students.birth_date" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">email:</label>
-                    <InputText id="email" @bind-Value="Student.email" class="form-control" />
-                    <ValidationMessage For="() => Student.email" class="text-danger" />
+                    <InputText id="email" @bind-Value="Students.email" class="form-control" />
+                    <ValidationMessage For="() => Students.email" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">phone:</label>
-                    <InputText id="phone" @bind-Value="Student.phone" class="form-control" />
-                    <ValidationMessage For="() => Student.phone" class="text-danger" />
+                    <InputText id="phone" @bind-Value="Students.phone" class="form-control" />
+                    <ValidationMessage For="() => Students.phone" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="photo" class="form-label">photo:</label>
-                    <InputText id="photo" @bind-Value="Student.photo" class="form-control" />
-                    <ValidationMessage For="() => Student.photo" class="text-danger" />
+                    <InputText id="photo" @bind-Value="Students.photo" class="form-control" />
+                    <ValidationMessage For="() => Students.photo" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="group" class="form-label">group:</label>
-                    <InputNumber id="group" @bind-Value="Student.group" class="form-control" />
-                    <ValidationMessage For="() => Student.group" class="text-danger" />
+                    <InputNumber id="group" @bind-Value="Students.group" class="form-control" />
+                    <ValidationMessage For="() => Students.group" class="text-danger" />
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
@@ -71,7 +72,7 @@ else
 }
 
 <div>
-    <a href="/students">Back to List</a>
+    <a href="/studentss">Back to List</a>
 </div>
 
 @code {
@@ -79,14 +80,14 @@ else
     private int stud_id { get; set; }
 
     [SupplyParameterFromForm]
-    private Student? Student { get; set; }
+    private Students? Students { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        Student ??= await context.Students.FirstOrDefaultAsync(m => m.stud_id == stud_id);
+        Students ??= await context.Students.FirstOrDefaultAsync(m => m.stud_id == stud_id);
 
-        if (Student is null)
+        if (Students is null)
         {
             NavigationManager.NavigateTo("notfound");
         }
@@ -94,10 +95,10 @@ else
 
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
-    private async Task UpdateStudent()
+    private async Task UpdateStudents()
     {
         using var context = DbFactory.CreateDbContext();
-        context.Attach(Student!).State = EntityState.Modified;
+        context.Attach(Students!).State = EntityState.Modified;
 
         try
         {
@@ -105,7 +106,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!StudentExists(Student!.stud_id))
+            if (!StudentsExists(Students!.stud_id))
             {
                 NavigationManager.NavigateTo("notfound");
             }
@@ -115,10 +116,10 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/students");
+        NavigationManager.NavigateTo("/studentss");
     }
 
-    private bool StudentExists(int stud_id)
+    private bool StudentsExists(int stud_id)
     {
         using var context = DbFactory.CreateDbContext();
         return context.Students.Any(e => e.stud_id == stud_id);

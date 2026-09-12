@@ -1,4 +1,4 @@
-@page "/groups/edit"
+@page "/groupss/edit"
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -8,9 +8,9 @@
 
 <h1>Edit</h1>
 
-<h2>Group</h2>
+<h2>Groups</h2>
 <hr />
-@if (Group is null)
+@if (Groups is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -18,34 +18,34 @@ else
 {
     <div class="row">
         <div class="col-md-4">
-            <EditForm method="post" Model="Group" OnValidSubmit="UpdateGroup" FormName="edit" Enhance>
+            <EditForm method="post" Model="Groups" OnValidSubmit="UpdateGroups" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
-                <input type="hidden" name="Group.group_id" value="@Group.group_id" />
+                <input type="hidden" name="Groups.group_id" value="@Groups.group_id" />
                 <div class="mb-3">
                     <label for="group_name" class="form-label">group_name:</label>
-                    <InputText id="group_name" @bind-Value="Group.group_name" class="form-control" />
-                    <ValidationMessage For="() => Group.group_name" class="text-danger" />
+                    <InputText id="group_name" @bind-Value="Groups.group_name" class="form-control" />
+                    <ValidationMessage For="() => Groups.group_name" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="direction" class="form-label">direction:</label>
-                    <InputNumber id="direction" @bind-Value="Group.direction" class="form-control" />
-                    <ValidationMessage For="() => Group.direction" class="text-danger" />
+                    <InputNumber id="direction" @bind-Value="Groups.direction" class="form-control" />
+                    <ValidationMessage For="() => Groups.direction" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="weekdays" class="form-label">weekdays:</label>
-                    <InputNumber id="weekdays" @bind-Value="Group.weekdays" class="form-control" />
-                    <ValidationMessage For="() => Group.weekdays" class="text-danger" />
+                    <InputNumber id="weekdays" @bind-Value="Groups.weekdays" class="form-control" />
+                    <ValidationMessage For="() => Groups.weekdays" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="start_time" class="form-label">start_time:</label>
-                    <InputDate id="start_time" @bind-Value="Group.start_time" class="form-control" />
-                    <ValidationMessage For="() => Group.start_time" class="text-danger" />
+                    <InputDate id="start_time" @bind-Value="Groups.start_time" class="form-control" />
+                    <ValidationMessage For="() => Groups.start_time" class="text-danger" />
                 </div>
                 <div class="mb-3">
                     <label for="start_date" class="form-label">start_date:</label>
-                    <InputDate id="start_date" @bind-Value="Group.start_date" class="form-control" />
-                    <ValidationMessage For="() => Group.start_date" class="text-danger" />
+                    <InputDate id="start_date" @bind-Value="Groups.start_date" class="form-control" />
+                    <ValidationMessage For="() => Groups.start_date" class="text-danger" />
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
@@ -54,7 +54,7 @@ else
 }
 
 <div>
-    <a href="/groups">Back to List</a>
+    <a href="/groupss">Back to List</a>
 </div>
 
 @code {
@@ -62,14 +62,14 @@ else
     private int group_id { get; set; }
 
     [SupplyParameterFromForm]
-    private Group? Group { get; set; }
+    private Groups? Groups { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        Group ??= await context.Groups.FirstOrDefaultAsync(m => m.group_id == group_id);
+        Groups ??= await context.Groups.FirstOrDefaultAsync(m => m.group_id == group_id);
 
-        if (Group is null)
+        if (Groups is null)
         {
             NavigationManager.NavigateTo("notfound");
         }
@@ -77,10 +77,10 @@ else
 
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
-    private async Task UpdateGroup()
+    private async Task UpdateGroups()
     {
         using var context = DbFactory.CreateDbContext();
-        context.Attach(Group!).State = EntityState.Modified;
+        context.Attach(Groups!).State = EntityState.Modified;
 
         try
         {
@@ -88,7 +88,7 @@ else
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!GroupExists(Group!.group_id))
+            if (!GroupsExists(Groups!.group_id))
             {
                 NavigationManager.NavigateTo("notfound");
             }
@@ -98,10 +98,10 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/groups");
+        NavigationManager.NavigateTo("/groupss");
     }
 
-    private bool GroupExists(int group_id)
+    private bool GroupsExists(int group_id)
     {
         using var context = DbFactory.CreateDbContext();
         return context.Groups.Any(e => e.group_id == group_id);

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
 {
-    public class Group
+    public class Groups
     {
         [Key]
         public int group_id { get; set; }

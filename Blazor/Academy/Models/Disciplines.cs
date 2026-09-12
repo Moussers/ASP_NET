@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
 {
-    public class Discipline
+    public class Disciplines
     {
         [Key]
         [Column(TypeName = "SMALLINT")]

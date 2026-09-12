@@ -1,0 +1,84 @@
+@page "/studentss/create"
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Students</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Students" OnValidSubmit="AddStudents" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <span class="text-danger">*</span>
+                <label for="last_name" class="form-label">last_name:</label> 
+                <InputText id="last_name" @bind-Value="Students.last_name" class="form-control" aria-required="true"/> 
+                <ValidationMessage For="() => Students.last_name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <span class="text-danger">*</span>
+                <label for="first_name" class="form-label">first_name:</label> 
+                <InputText id="first_name" @bind-Value="Students.first_name" class="form-control" aria-required="true"/> 
+                <ValidationMessage For="() => Students.first_name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="middle_name" class="form-label">middle_name:</label> 
+                <InputText id="middle_name" @bind-Value="Students.middle_name" class="form-control" /> 
+                <ValidationMessage For="() => Students.middle_name" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <span class="text-danger">*</span>
+                <label for="birth_date" class="form-label">birth_date:</label> 
+                <InputDate id="birth_date" @bind-Value="Students.birth_date" class="form-control" aria-required="true"/> 
+                <ValidationMessage For="() => Students.birth_date" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="email" class="form-label">email:</label> 
+                <InputText id="email" @bind-Value="Students.email" class="form-control" /> 
+                <ValidationMessage For="() => Students.email" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="phone" class="form-label">phone:</label> 
+                <InputText id="phone" @bind-Value="Students.phone" class="form-control" /> 
+                <ValidationMessage For="() => Students.phone" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="photo" class="form-label">photo:</label> 
+                <InputText id="photo" @bind-Value="Students.photo" class="form-control" /> 
+                <ValidationMessage For="() => Students.photo" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="group" class="form-label">group:</label> 
+                <InputNumber id="group" @bind-Value="Students.group" class="form-control" /> 
+                <ValidationMessage For="() => Students.group" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/studentss">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Students Students { get; set; } = default!;
+
+    protected override void OnInitialized() => Students ??= new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddStudents()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Students.Add(Students);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/studentss");
+    }
+}

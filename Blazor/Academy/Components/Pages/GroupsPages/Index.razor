@@ -1,0 +1,40 @@
+@page "/groups"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore
+@using Academy.Models
+@implements IAsyncDisposable
+@inject IDbContextFactory<AcademyContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="groupss/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Groups">
+    <PropertyColumn Property="groups => groups.group_name" />
+    <PropertyColumn Property="groups => groups.direction" />
+    <PropertyColumn Property="groups => groups.weekdays" />
+    <PropertyColumn Property="groups => groups.start_time" />
+    <PropertyColumn Property="groups => groups.start_date" />
+
+    <TemplateColumn Context="groups">
+        <a href="@($"groupss/edit?group_id={groups.group_id}")">Edit</a> |
+        <a href="@($"groupss/details?group_id={groups.group_id}")">Details</a> |
+        <a href="@($"groupss/delete?group_id={groups.group_id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    private AcademyContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

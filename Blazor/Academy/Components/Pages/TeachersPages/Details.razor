@@ -1,4 +1,4 @@
-@page "/teachers/details"
+@page "/teacherss/details"
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -9,40 +9,40 @@
 <h1>Details</h1>
 
 <div>
-    <h2>Teacher</h2>
+    <h2>Teachers</h2>
     <hr />
-    @if (teacher is null)
+    @if (teachers is null)
     {
         <p><em>Loading...</em></p>
     }
     else {
         <dl class="row">
             <dt class="col-sm-2">last_name</dt>
-            <dd class="col-sm-10">@teacher.last_name</dd>
+            <dd class="col-sm-10">@teachers.last_name</dd>
             <dt class="col-sm-2">first_name</dt>
-            <dd class="col-sm-10">@teacher.first_name</dd>
+            <dd class="col-sm-10">@teachers.first_name</dd>
             <dt class="col-sm-2">middle_name</dt>
-            <dd class="col-sm-10">@teacher.middle_name</dd>
+            <dd class="col-sm-10">@teachers.middle_name</dd>
             <dt class="col-sm-2">birth_date</dt>
-            <dd class="col-sm-10">@teacher.birth_date</dd>
+            <dd class="col-sm-10">@teachers.birth_date</dd>
             <dt class="col-sm-2">email</dt>
-            <dd class="col-sm-10">@teacher.email</dd>
+            <dd class="col-sm-10">@teachers.email</dd>
             <dt class="col-sm-2">phone</dt>
-            <dd class="col-sm-10">@teacher.phone</dd>
+            <dd class="col-sm-10">@teachers.phone</dd>
             <dt class="col-sm-2">work_since</dt>
-            <dd class="col-sm-10">@teacher.work_since</dd>
+            <dd class="col-sm-10">@teachers.work_since</dd>
             <dt class="col-sm-2">rate</dt>
-            <dd class="col-sm-10">@teacher.rate</dd>
+            <dd class="col-sm-10">@teachers.rate</dd>
         </dl>
         <div>
-            <a href="@($"/teachers/edit?teacher_id={teacher.teacher_id}")">Edit</a> |
-            <a href="@($"/teachers")">Back to List</a>
+            <a href="@($"/teacherss/edit?teacher_id={teachers.teacher_id}")">Edit</a> |
+            <a href="@($"/teacherss")">Back to List</a>
         </div>
     }
 </div>
 
 @code {
-    private Teacher? teacher;
+    private Teachers? teachers;
 
     [SupplyParameterFromQuery]
     private short teacher_id { get; set; }
@@ -50,9 +50,9 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        teacher = await context.Teachers.FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
+        teachers = await context.Teachers.FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
 
-        if (teacher is null)
+        if (teachers is null)
         {
             NavigationManager.NavigateTo("notfound");
         }
