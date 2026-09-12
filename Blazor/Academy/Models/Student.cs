@@ -12,6 +12,7 @@ namespace Academy.Models
         [Required]
         public string first_name { get; set; }
         public string? middle_name{ get; set; }
+        [Required]
         public DateTime birth_date { get; set; }
         public string? email { get; set; }
         public string? phone { get; set; }
