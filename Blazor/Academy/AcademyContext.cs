@@ -4,4 +4,5 @@ public class AcademyContext(DbContextOptions<AcademyContext> options) : DbContex
 {
     public DbSet<Academy.Models.Discipline> Disciplines { get; set; } = default!;
     //DbSet - список
+    public DbSet<Academy.Models.Student> Students{ get; set; } = default!;
 }
