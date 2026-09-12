@@ -6,4 +6,5 @@ public class AcademyContext(DbContextOptions<AcademyContext> options) : DbContex
     //DbSet - список
     public DbSet<Academy.Models.Student> Students { get; set; } = default!;
     public DbSet<Academy.Models.Teacher> Teachers { get; set; } = default!;
+    public DbSet<Academy.Models.Group> Groups { get; set; } = default!;
 }
