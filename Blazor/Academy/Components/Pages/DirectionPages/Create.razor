@@ -1,4 +1,4 @@
-@page "/directionss/create"
+@page "/directions/create"
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -8,17 +8,18 @@
 
 <h1>Create</h1>
 
-<h2>Directions</h2>
+<h2>Direction</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <EditForm method="post" Model="Directions" OnValidSubmit="AddDirections" FormName="create" Enhance>
+        <EditForm method="post" Model="Direction" OnValidSubmit="AddDirection" FormName="create" Enhance>
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert"/>
             <div class="mb-3">
+                <span class="text-danger">*</span>
                 <label for="direction_name" class="form-label">direction_name:</label> 
-                <InputText id="direction_name" @bind-Value="Directions.direction_name" class="form-control" /> 
-                <ValidationMessage For="() => Directions.direction_name" class="text-danger" /> 
+                <InputText id="direction_name" @bind-Value="Direction.direction_name" class="form-control" aria-required="true"/> 
+                <ValidationMessage For="() => Direction.direction_name" class="text-danger" /> 
             </div>        
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
@@ -26,21 +27,21 @@
 </div>
 
 <div>
-    <a href="/directionss">Back to List</a>
+    <a href="/directions">Back to List</a>
 </div>
 
 @code {
     [SupplyParameterFromForm]
-    private Directions Directions { get; set; } = default!;
+    private Direction Direction { get; set; } = default!;
 
-    protected override void OnInitialized() => Directions ??= new();
+    protected override void OnInitialized() => Direction ??= new();
 
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
-    private async Task AddDirections()
+    private async Task AddDirection()
     {
         using var context = DbFactory.CreateDbContext();
-        context.Directions.Add(Directions);
+        context.Directions.Add(Direction);
         await context.SaveChangesAsync();
-        NavigationManager.NavigateTo("/directionss");
+        NavigationManager.NavigateTo("/directions");
     }
 }

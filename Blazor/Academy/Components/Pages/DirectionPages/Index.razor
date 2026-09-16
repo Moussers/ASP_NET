@@ -11,16 +11,16 @@
 <h1>Index</h1>
 
 <p>
-    <a href="directionss/create">Create New</a>
+    <a href="directions/create">Create New</a>
 </p>
 
 <QuickGrid Class="table" Items="context.Directions">
-    <PropertyColumn Property="directions => directions.direction_name" />
+    <PropertyColumn Property="direction => direction.direction_name" />
 
-    <TemplateColumn Context="directions">
-        <a href="@($"directionss/edit?direction_id={directions.direction_id}")">Edit</a> |
-        <a href="@($"directionss/details?direction_id={directions.direction_id}")">Details</a> |
-        <a href="@($"directionss/delete?direction_id={directions.direction_id}")">Delete</a>
+    <TemplateColumn Context="direction">
+        <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
+        <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |
+        <a href="@($"directions/delete?direction_id={direction.direction_id}")">Delete</a>
     </TemplateColumn>
 </QuickGrid>
 
