@@ -21,7 +21,7 @@ namespace Academy.Models
         public TimeOnly? start_time { get; set; }
         public DateOnly? start_date { get; set; }
 
-        //Navigation properties - это перменные, точнее свойтства которые хранят данные из связанных таблиц.
+        //Navigation properties - это переменные, точнее свойства которые хранят данные из связанных таблиц.
         //То есть у нас не только хранится сама запись, а данные на которрые эта запись ссылается в других
         //таблицах.
 
