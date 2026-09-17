@@ -1,4 +1,4 @@
-@page "/students"
+п»ї@page "/students"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
@@ -16,13 +16,20 @@
 </p>
 
 <div>
+    <form action="/students">
+        <input type="search" name="titleFilter"/>
+        <input type="submit" value="РџРѕРёСЃРє" class="btn btn-primary"/>
+    </form>
+</div>
+
+<div>
     <QuickGrid Class="table" Items="students" Pagination="pagination">
         @* <PropertyColumn Property="student => student.last_name" /> *@
         @* <PropertyColumn Property="student => student.first_name" /> *@
         @* <PropertyColumn Property="student => student.middle_name" /> *@
-        <PropertyColumn Property="student => student.FullName" Sortable="true"/>
+        <PropertyColumn Property="student => student.FullName" Sortable="true" Class="stud-name"/>
         @* <PropertyColumn Property="student => student.birth_date" /> *@
-        <TemplateColumn Title="Возраст" Context="student" SortBy="@sortByBirth" >
+        <TemplateColumn Title="Age" Context="student" SortBy="@sortByBirth" Class="stud-age">
             @{
                 var age = DateTime.Now.Year - student.birth_date.Year;
                 if ((DateTime.Now.Month < student.birth_date.Month) || ((DateTime.Now.Month == student.birth_date.Month) && (DateTime.Now.Day < student.birth_date.Day)))
@@ -35,9 +42,8 @@
         @* <PropertyColumn Property="student => student.email" /> *@
         @* <PropertyColumn Property="student => student.phone" /> *@
         @* <PropertyColumn Property="student => student.photo" /> *@
-        <PropertyColumn Property="student => student.Group.group_name" Sortable="true"/>
-        <PropertyColumn Property="student => student.Group.Direction.direction_name" Sortable="true"/>
-
+        <PropertyColumn Property="student => student.Group.group_name" Sortable="true" Class="name-stud"/>
+        <PropertyColumn Property="student => student.Group.Direction.direction_name" Sortable="true" Class="gr-dir-name"/>
         <TemplateColumn Context="student">
             <a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a>
         </TemplateColumn>
@@ -45,13 +51,22 @@
     <Paginator State="pagination" />
 </div>
 
-@code {
+@code 
+{
     private AcademyContext context = default!;
     IQueryable<Student> students = default!;
+    string? TitleFilter { get; set; }
+    //string? - РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ РїРѕР»Рµ РјРѕР¶РµС‚ Р±С‹С‚СЊ null
+    IQueryable<Student> NameFilter => context.Students
+                                        .Where(st => st.last_name
+                                        .Contains(TitleFilter ?? string.Empty) && st.first_name
+                                        .Contains(TitleFilter ?? string.Empty) && st.middle_name.
+                                        Contains(TitleFilter ?? string.Empty));
+
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     GridSort<Student> sortByBirth = GridSort<Student>.ByAscending(student => student.birth_date);
-    //GridSort - это класс который сорирует по определенному типу (к примеру: по дню рождения)
-    //ByAscending - возвращает шаблон сортировки
+    //GridSort - СЌС‚Рѕ РєР»Р°СЃСЃ РєРѕС‚РѕСЂС‹Р№ СЃРѕСЂРёСЂСѓРµС‚ РїРѕ РѕРїСЂРµРґРµР»РµРЅРЅРѕРјСѓ С‚РёРїСѓ (Рє РїСЂРёРјРµСЂСѓ: РїРѕ РґРЅСЋ СЂРѕР¶РґРµРЅРёСЏ)
+    //ByAscending - РІРѕР·РІСЂР°С‰Р°РµС‚ С€Р°Р±Р»РѕРЅ СЃРѕСЂС‚РёСЂРѕРІРєРё
 
     protected override void OnInitialized()
     {
@@ -60,7 +75,7 @@
                     .Students
                     .Include(s => s.Group)
                     .ThenInclude(g => g.Direction);
-        //Связь строится по типу JOIN
+        //РЎРІСЏР·СЊ СЃС‚СЂРѕРёС‚СЃСЏ РїРѕ С‚РёРїСѓ JOIN
     }
 
 

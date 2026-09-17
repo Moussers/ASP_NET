@@ -1,4 +1,4 @@
-@page "/groups/create"
+п»ї@page "/groups/create"
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -26,7 +26,7 @@
                 <label for="direction" class="form-label">direction:</label> 
                 @* <InputNumber id="direction" @bind-Value="Group.direction" class="form-control" aria-required="true"/>  *@
                 <InputSelect id="direction" @bind-Value="Group.direction" class="form-control">
-                    <option disabled selected> --- Выберите напрпавлении обучения </option>
+                    <option disabled selected> --- Р’С‹Р±РµСЂРёС‚Рµ РЅР°РїСЂРїР°РІР»РµРЅРёРё РѕР±СѓС‡РµРЅРёСЏ </option>
                     @using (AcademyContext context = DbFactory.CreateDbContext())
                     {
                         @foreach (Direction d in context.Directions)

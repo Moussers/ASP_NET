@@ -1,10 +1,15 @@
-﻿.controls
+﻿.controls 
 {
     display: flex;
     justify-content: space-between;
 }
 
-::deep .gr-name 
+::deep .stud-name 
+{
+    width: 30%;
+}
+
+::deep .stud-age 
 {
     width: 20%;
 }

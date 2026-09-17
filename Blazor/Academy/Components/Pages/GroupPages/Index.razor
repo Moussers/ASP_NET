@@ -1,4 +1,4 @@
-@page "/groups"
+п»ї@page "/groups"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
@@ -18,11 +18,11 @@
 <div>
     <QuickGrid Class="table" Items="groups" Pagination="pagination">
         @* <PropertyColumn Property="group => group.group_name" /> *@
-        <TemplateColumn Context="group" Title="Group">
-            @* Title="Group" - название для первой колонки *@
+        <TemplateColumn Context="group" Title="Group" Class="gr-name">
+            @* Title="Group" - РЅР°Р·РІР°РЅРёРµ РґР»СЏ РїРµСЂРІРѕР№ РєРѕР»РѕРЅРєРё *@
             <a href="@($"groups/details?group_id={group.group_id}")">@group.group_name</a>
         </TemplateColumn>
-        <PropertyColumn Property="group => group.Direction.direction_name" Sortable="true" Class="gr-drct-name"/>
+        <PropertyColumn Property="group => group.Direction.direction_name" Sortable="true" Class="gr-dir-name"/>
         <PropertyColumn Property="group => group.learning_days" Sortable="true" Class="gr-learning-days"/>
         <PropertyColumn Property="group => group.start_time" Sortable="true" Class="gr-start-time"/>
         <PropertyColumn Property="group => group.start_date" Sortable="true" Class="gr-start-date"/>
