@@ -27,5 +27,10 @@ namespace Academy.Models
         [Column("photo", TypeName = "IMAGE")]
         public byte[]? photo { get; set; }
 
+        //          Calculated properties:
+        public string FullName 
+        {
+            get => $"{last_name} {first_name} {middle_name}";
+        }
     }
 }

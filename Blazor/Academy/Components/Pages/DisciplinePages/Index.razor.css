@@ -1,0 +1,15 @@
+﻿.controls 
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+::deep .discipline-name 
+{
+    width: 40%;
+}
+
+::deep .discipline-lessons 
+{
+    width: 40%;
+}

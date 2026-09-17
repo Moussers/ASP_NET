@@ -5,7 +5,7 @@
 @implements IAsyncDisposable
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
-
+@rendermode InteractiveServer
 <PageTitle>Index</PageTitle>
 
 <h1>Index</h1>
@@ -14,18 +14,32 @@
     <a href="directions/create">Create New</a>
 </p>
 
-<QuickGrid Class="table" Items="context.Directions">
-    <PropertyColumn Property="direction => direction.direction_name" />
+<div>
+    <QuickGrid Class="table" Items="context.Directions" Pagination="pagination">
+        @* QuickGrid Ч это компонент Razor дл€ быстрого и эффективного отображени€ данных в табличной форме. QuickGrid 
+        предоставл€ет простой и удобный компонент сетки данных дл€ распространенных сценариев отрисовки сетки *@
+        @* ------------------------------------------------------------------------------------------------------------ *@
+        @* Pagination: при необходимости св€зывает этот TGridItem экземпл€р с PaginationState моделью, что приводит к 
+        отрисовке только текущей страницы данных. ќбычно это используетс€ в сочетании с компонентом Paginator или другой 
+        логикой пользовательского интерфейса, котора€ отображает и обновл€ет предоставленный PaginationState экземпл€р. *@
+        @* ------------------------------------------------------------------------------------------------------------ *@
 
-    <TemplateColumn Context="direction">
-        <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
-        <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |
-        <a href="@($"directions/delete?direction_id={direction.direction_id}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+        <PropertyColumn Property="direction => direction.direction_name" Sortable="true" Class="direction-name"/>
+        @* Sortable -отвечает за сортировку *@
 
-@code {
+        <TemplateColumn Context="direction">
+            <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
+            <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |
+            <a href="@($"directions/delete?direction_id={direction.direction_id}")">Delete</a>
+        </TemplateColumn>
+    </QuickGrid>
+    <Paginator State="pagination" />
+</div>
+
+@code 
+{
     private AcademyContext context = default!;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10};
 
     protected override void OnInitialized()
     {
