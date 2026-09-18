@@ -27,7 +27,14 @@
         @* <PropertyColumn Property="student => student.last_name" /> *@
         @* <PropertyColumn Property="student => student.first_name" /> *@
         @* <PropertyColumn Property="student => student.middle_name" /> *@
-        <PropertyColumn Property="student => student.FullName" Sortable="true" Class="stud-name"/>
+        @* <PropertyColumn Property="student => student.FullName" Sortable="true" Class="stud-name"/> *@
+            <TemplateColumn Context="student" 
+                Title="Student" 
+                Sortable="true" 
+                SortBy="sortBy"
+            >
+                @student.FullName
+            </TemplateColumn>
         @* <PropertyColumn Property="student => student.birth_date" /> *@
         <TemplateColumn Title="Age" Context="student" SortBy="@sortByBirth" Class="stud-age">
             @{
@@ -56,15 +63,16 @@
     private AcademyContext context = default!;
     IQueryable<Student> students = default!;
     string? TitleFilter { get; set; }
-    //string? - означает, что поле может быть null
-    IQueryable<Student> NameFilter => context.Students
-                                        .Where(st => st.last_name
-                                        .Contains(TitleFilter ?? string.Empty) && st.first_name
-                                        .Contains(TitleFilter ?? string.Empty) && st.middle_name.
-                                        Contains(TitleFilter ?? string.Empty));
+
+    GridSort<Student> sortBy = GridSort<Student>.ByAscending(s => s.last_name);
+    // IQueryable<Student> NameFilter => context.Students
+    //                                     .Where(st => st.last_name
+    //                                     .Contains(TitleFilter ?? string.Empty) && st.first_name
+    //                                     .Contains(TitleFilter ?? string.Empty) && st.middle_name.
+    //                                     Contains(TitleFilter ?? string.Empty));
 
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
-    GridSort<Student> sortByBirth = GridSort<Student>.ByAscending(student => student.birth_date);
+    GridSort<Student> sortByBirth = GridSort<Student>.ByAscending(student => student.birth_date).ThenAscending(s => s.first_name);
     //GridSort - это класс который сорирует по определенному типу (к примеру: по дню рождения)
     //ByAscending - возвращает шаблон сортировки
 

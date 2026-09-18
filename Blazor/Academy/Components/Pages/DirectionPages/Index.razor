@@ -50,6 +50,7 @@
     PaginationState pagination = new PaginationState { ItemsPerPage = 10};
     [SupplyParameterFromQuery]
     string? TitleFilter { get; set; }
+
     IQueryable<Direction> FilteredDirections => 
     context.Directions.Where(dir => dir.direction_name.Contains(TitleFilter ?? string.Empty));
     protected override void OnInitialized()

@@ -15,6 +15,13 @@
     <a href="groups/create">Create New</a>
 </p>
 
+<div class="controls">
+    <form action="groups">
+        <input type="search" name="titleFilter" />
+        <input type="submit" value="Поиск" class="btn btn-primary" />
+    </form>
+</div>
+
 <div>
     <QuickGrid Class="table" Items="groups" Pagination="pagination">
         @* <PropertyColumn Property="group => group.group_name" /> *@
@@ -38,6 +45,7 @@
 
 @code {
     private AcademyContext context = default!;
+    string? TitleFilter { get; set; }
     IQueryable<Group> groups = default!;
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
 
