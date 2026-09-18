@@ -28,6 +28,7 @@
         @* <PropertyColumn Property="student => student.first_name" /> *@
         @* <PropertyColumn Property="student => student.middle_name" /> *@
         @* <PropertyColumn Property="student => student.FullName" Sortable="true" Class="stud-name"/> *@
+        <PropertyColumn Property="student => student.stud_id"/>
             <TemplateColumn Context="student" 
                 Title="Student" 
                 Sortable="true" 
@@ -35,6 +36,10 @@
             >
                 @student.FullName
             </TemplateColumn>
+        @* InitialSortDirection="SortDirection.Ascending" *@
+        @* InitialSortDirection - позволяет сортировать в 
+           определенном порядке по возарстанию или убыванию*@
+
         @* <PropertyColumn Property="student => student.birth_date" /> *@
         <TemplateColumn Title="Age" Context="student" SortBy="@sortByBirth" Class="stud-age">
             @{
@@ -52,6 +57,7 @@
         <PropertyColumn Property="student => student.Group.group_name" Sortable="true" Class="name-stud"/>
         <PropertyColumn Property="student => student.Group.Direction.direction_name" Sortable="true" Class="gr-dir-name"/>
         <TemplateColumn Context="student">
+            @* <a href="@($"students/details?stud_id={student.stud_id}")">Edit</a> *@
             <a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a>
         </TemplateColumn>
     </QuickGrid>
