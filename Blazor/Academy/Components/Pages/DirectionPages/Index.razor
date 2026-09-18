@@ -6,16 +6,24 @@
 @inject IDbContextFactory<AcademyContext> DbFactory
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
-<PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
+<PageTitle>Directions</PageTitle>
+
+<h1>Directions</h1>
 
 <p>
     <a href="directions/create">Create New</a>
 </p>
 
+<div class="controls">
+    <form action="directions">
+        <input type="search" name="titleFilter" />
+        <input type="submit" value="Поиск" class="btn btn-primary"/>
+    </form>
+</div>
+
 <div>
-    <QuickGrid Class="table" Items="context.Directions" Pagination="pagination">
+    <QuickGrid Class="table" Items="FilteredDirections" Pagination="pagination">
         @* QuickGrid — это компонент Razor для быстрого и эффективного отображения данных в табличной форме. QuickGrid 
         предоставляет простой и удобный компонент сетки данных для распространенных сценариев отрисовки сетки *@
         @* ------------------------------------------------------------------------------------------------------------ *@
@@ -40,7 +48,10 @@
 {
     private AcademyContext context = default!;
     PaginationState pagination = new PaginationState { ItemsPerPage = 10};
-
+    [SupplyParameterFromQuery]
+    string? TitleFilter { get; set; }
+    IQueryable<Direction> FilteredDirections => 
+    context.Directions.Where(dir => dir.direction_name.Contains(TitleFilter ?? string.Empty));
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();

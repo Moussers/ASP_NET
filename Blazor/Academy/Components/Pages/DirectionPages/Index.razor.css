@@ -1,7 +1,12 @@
-﻿.controls
+﻿.controls 
 {
     display: flex;
     justify-content: space-between;
+}
+
+input[type=search] 
+{
+   text-align: center;
 }
 
 ::deep .direction-name 

@@ -4,6 +4,11 @@
     justify-content: space-between;
 }
 
+input[type=search] 
+{
+    text-align: center;
+}
+
 ::deep .discipline-name 
 {
     width: 40%;

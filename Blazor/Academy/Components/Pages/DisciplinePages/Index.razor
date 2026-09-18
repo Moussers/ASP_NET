@@ -7,16 +7,23 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Disciplines</PageTitle>
 
-<h1>Index</h1>
+<h1>Disciplines</h1>
 
 <p>
     <a href="disciplines/create">Create New</a>
 </p>
 
+<div class="controls">
+    <form action="/disciplines">
+        <input type="search" name="titleFilter" />
+        <input type="submit" value="Поиск" class="btn btn-primary" />
+    </form>
+</div>
+
 <div>
-    <QuickGrid Class="table" Items="context.Disciplines" Pagination="pagination">
+    <QuickGrid Class="table" Items="FilteredDisciplines" Pagination="pagination">
         <PropertyColumn Property="discipline => discipline.discipline_name" Sortable="true"     Class="discipline-name"/>
         <PropertyColumn Property="discipline => discipline.number_of_lessons" Sortable="true"   Class="discipline-lessons" />
 
@@ -29,9 +36,14 @@
     <Paginator State="pagination" />
 </div>
 
-@code {
+@code 
+{
     private AcademyContext context = default!;
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    [SupplyParameterFromQuery]
+    string? TitleFilter { get; set; }
+    IQueryable<Discipline> FilteredDisciplines => 
+    context.Disciplines.Where(d => d.discipline_name.Contains(TitleFilter ?? string.Empty));
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
