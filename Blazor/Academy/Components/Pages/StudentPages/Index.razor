@@ -57,7 +57,7 @@
         <PropertyColumn Property="student => student.Group.group_name" Sortable="true" Class="name-stud"/>
         <PropertyColumn Property="student => student.Group.Direction.direction_name" Sortable="true" Class="gr-dir-name"/>
         <TemplateColumn Context="student">
-            @* <a href="@($"students/details?stud_id={student.stud_id}")">Edit</a> *@
+            <a href="@($"students/details?stud_id={student.stud_id}")">Details</a>
             <a href="@($"students/edit?stud_id={student.stud_id}")">Edit</a>
         </TemplateColumn>
     </QuickGrid>

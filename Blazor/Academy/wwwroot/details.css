@@ -1,0 +1,16 @@
+﻿.details 
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.details > div
+{
+    width: 38%;
+}
+
+.photo-container > img 
+{
+    width: 50%;
+}
+/*отвечает за размер фото на странице*/
