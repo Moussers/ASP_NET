@@ -12,5 +12,12 @@
 .photo-container > img 
 {
     width: 50%;
+    object-fit: scale-down;
 }
 /*отвечает за размер фото на странице*/
+
+.photo-container div 
+{
+    min-height: 600px;
+    border: solid 1px;
+}
