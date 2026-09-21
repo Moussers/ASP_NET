@@ -9,9 +9,9 @@
     width: 38%;
 }
 
-.photo-container > img 
+.photo-container img 
 {
-    width: 50%;
+    width: 100%;
     object-fit: scale-down;
 }
 /*отвечает за размер фото на странице*/

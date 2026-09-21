@@ -60,10 +60,10 @@
                             <option selected disabled>--- Выберите группу ---</option>
                             @using (AcademyContext context = DbFactory.CreateDbContext())
                             {
-                            foreach (Group group in context.Groups)
-                            {
-                            <option value="@group.group_id">@group.group_name</option>
-                            }
+                                foreach (Group group in context.Groups)
+                                {
+                                    <option value="@group.group_id">@group.group_name</option>
+                                }
                             }
                         </InputSelect>
                         <ValidationMessage For="() => Student.group" class="text-danger" />
@@ -80,8 +80,8 @@
                     {
                         <Photo Image="@Student.photo" />
                     }
-                    <InputFile Onchange="LoadPhoto" />
                     </div>
+                    <InputFile Onchange="LoadPhoto" />      @* Кнопка загрузить фото *@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>

@@ -42,6 +42,8 @@ else
                     </InputSelect>
                     <ValidationMessage For="() => Group.direction" class="text-danger" />
                 </div>
+
+                <Weekdays Group="@Group" />
                 <div class="mb-3">
                     <label for="learning_days" class="form-label">learning_days:</label>
                     <InputNumber id="learning_days" @bind-Value="Group.learning_days" class="form-control" />
