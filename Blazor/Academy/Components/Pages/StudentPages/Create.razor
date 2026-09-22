@@ -75,13 +75,7 @@
                 <ValidationMessage For="() => Student.photo" class="text-danger" />
                 </div> *@
                 <div class="photo-container">
-                    <div>
-                    @if (Student.photo != null)
-                    {
-                        <Photo Image="@Student.photo" />
-                    }
-                    </div>
-                    <InputFile Onchange="LoadPhoto" />      @* Кнопка загрузить фото *@
+                   <Photo human="@Student" />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
@@ -98,14 +92,8 @@
     [SupplyParameterFromForm]
     private Student Student { get; set; } = default!;
 
-    IBrowserFile URL { get; set; }
-    async Task LoadPhoto(InputFileChangeEventArgs e)
-    {
-        URL = e.File;
-        MemoryStream ms = new MemoryStream();
-        await URL.OpenReadStream().CopyToAsync(ms);
-        Student.photo = ms.ToArray();
-    }
+    @*IBrowserFile URL { get; set; }*@
+   
 
     protected override void OnInitialized() => Student ??= new();
 
