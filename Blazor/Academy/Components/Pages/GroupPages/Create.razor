@@ -47,6 +47,7 @@
             <div class="mb-3">
                 <label for="start_time" class="form-label">start_time:</label> 
                 <InputDate Type="InputDateType.Time" id="start_time" @bind-Value="Group.start_time" class="form-control" /> 
+                @* Если InputDate Type стоит, тогда пишем @bind-Value *@
                 <ValidationMessage For="() => Group.start_time" class="text-danger" /> 
             </div>        
             <div class="mb-3">

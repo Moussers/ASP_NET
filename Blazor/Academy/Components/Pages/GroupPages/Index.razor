@@ -32,7 +32,7 @@
             <a href="@($"groups/details?group_id={group.group_id}")">@group.group_name</a>
         </TemplateColumn>
         <PropertyColumn Property="group => group.Direction.direction_name" Sortable="true" Class="gr-dir-name"/>
-        <PropertyColumn Property="group => group.learning_days" Sortable="true" Class="gr-learning-days"/>
+        <PropertyColumn Property="group => new Week ((int)(group.learning_days ?? 0))" Sortable="true" Class="gr-learning-days"/>
         <PropertyColumn Property="group => group.start_time" Sortable="true" Class="gr-start-time"/>
         <PropertyColumn Property="group => group.start_date" Sortable="true" Class="gr-start-date"/>
 
