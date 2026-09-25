@@ -1,0 +1,20 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Academy.Models
+{
+    [PrimaryKey("teacher", "displine")]
+    public class TeachersDisplinesResations
+    {
+        [Column("teacher", TypeName = "SMALLINT")]
+        [ForeignKey(nameof(Teacher))]
+        public int teacher { get; set; }
+        [Column("discipline", TypeName = "SMALLINT")]
+        [ForeignKey(nameof(Discipline))]
+        public int discipline { get; set; }
+
+        //Navigation properties:
+        public Teacher Teacher { get; set; }
+        public Discipline Discipline { get; set; }
+    }
+}

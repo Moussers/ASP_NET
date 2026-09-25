@@ -15,5 +15,7 @@ namespace Academy.Models
         [Column(TypeName = "SMALLMONEY")]
         public decimal rate { get; set; }
         //smallmoney - decimal
+
+        //Navigation properties:
     }
 }
