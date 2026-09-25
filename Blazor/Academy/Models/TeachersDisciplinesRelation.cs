@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
 {
-    [PrimaryKey("teacher", "displine")]
-    public class TeachersDisplinesResations
+    [PrimaryKey("teacher", "discipline")]
+    public class TeachersDisciplinesRelation
     {
         [Column("teacher", TypeName = "SMALLINT")]
         [ForeignKey(nameof(Teacher))]
