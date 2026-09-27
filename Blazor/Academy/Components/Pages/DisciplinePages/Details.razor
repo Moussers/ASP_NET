@@ -15,7 +15,8 @@
     {
         <p><em>Loading...</em></p>
     }
-    else {
+    else 
+    {
         <dl class="row">
             <dt class="col-sm-2">discipline_name</dt>
             <dd class="col-sm-10">@discipline.discipline_name</dd>
@@ -27,22 +28,41 @@
             <a href="@($"/disciplines")">Back to List</a>
         </div>
     }
+    <ul>
+        @foreach (int t in tch)
+        {
+            <li>
+                <a href="@($"/teachers/details?teacher_id={t}")">@DbFactory.CreateDbContext().Teachers.FirstOrDefault(k => k.teacher_id == t).FullName</a>
+            </li>
+        }
+    </ul>
 </div>
 
-@code {
+@code 
+{
     private Discipline? discipline;
-
+    private List<int> tch = new List<int> { };
+    //List - хранит учителей
     [SupplyParameterFromQuery]
     private int discipline_id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        discipline = await context.Disciplines.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
+        discipline = await context
+                             .Disciplines
+                             .FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
 
         if (discipline is null)
         {
             NavigationManager.NavigateTo("notfound");
+        }
+        foreach (TeachersDisciplinesRelation tdr in context.TeachersDisciplinesRelation)
+        {
+            if (tdr.discipline == discipline.discipline_id)
+            {
+                tch.Add(tdr.teacher);
+            }
         }
     }
 }

@@ -36,7 +36,6 @@
 
     protected override void OnInitialized() => Direction ??= new();
 
-    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddDirection()
     {
         using var context = DbFactory.CreateDbContext();

@@ -44,7 +44,9 @@
             <div class="photo-container">
                 @if (student.photo != null)
                 {
-                    <Photo image="@student.photo" />
+                    <Photo human="@student" />
+                    //в human все данные есть и фото тоже, загружаем 
+                    //данные из класса student в класс human
                 }
             </div>
         </div>

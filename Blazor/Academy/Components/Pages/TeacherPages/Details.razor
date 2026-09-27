@@ -1,4 +1,4 @@
-@page "/teachers/details"
+п»ї@page "/teachers/details"
 @using Microsoft.EntityFrameworkCore
 @using Academy.Models
 @inject IDbContextFactory<AcademyContext> DbFactory
@@ -40,7 +40,7 @@
             <dt class="col-sm-2">FullName</dt>
             <dd class="col-sm-10">@teacher.FullName</dd>
         </dl>
-        <h3>Дисциплины</h3>
+        <h3>Р”РёСЃС†РёРїР»РёРЅС‹</h3>
         <ul>
             @foreach (TeachersDisciplinesRelation tdr in teacher.DisplinesResations)
             {

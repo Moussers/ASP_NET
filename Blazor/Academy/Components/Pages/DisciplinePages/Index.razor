@@ -24,12 +24,18 @@
 
 <div>
     <QuickGrid Class="table" Items="FilteredDisciplines" Pagination="pagination">
-        <PropertyColumn Property="discipline => discipline.discipline_name" Sortable="true"     Class="discipline-name"/>
+        @* <PropertyColumn Property="discipline => discipline.discipline_name" Sortable="true"     Class="discipline-name"/> *@
+            <TemplateColumn Context="discipline" Title="Discipline" Class="discipline-name">
+                <a href="@($"disciplines/details?discipline_id={discipline.discipline_id}")">
+                @* <a href="@(пишем ссылку, то есть путь к странице находяшейся внутрпри внешшней страницы)")"> - пример ссверху. *@
+                    @discipline.discipline_name
+                </a>
+            </TemplateColumn>
         <PropertyColumn Property="discipline => discipline.number_of_lessons" Sortable="true"   Class="discipline-lessons" />
 
         <TemplateColumn Context="discipline">
             <a href="@($"disciplines/edit?discipline_id={discipline.discipline_id}")">Edit</a> |
-            <a href="@($"disciplines/details?discipline_id={discipline.discipline_id}")">Details</a> |
+            @* <a href="@($"disciplines/details?discipline_id={discipline.discipline_id}")">Details</a> | *@
             <a href="@($"disciplines/delete?discipline_id={discipline.discipline_id}")">Delete</a>
         </TemplateColumn>
     </QuickGrid>
