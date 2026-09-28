@@ -42,7 +42,7 @@
             }
             else
             {
-                @((DateOnly.FromDateTime(DateTime.Now).DayNumber - teacher.work_since.DayNumber) / 365) @(" лет")
+                @GetExpirence(((DateOnly.FromDateTime(DateTime.Now).DayNumber - teacher.work_since.DayNumber) / 365));
             }
         </a>
         </TemplateColumn>
@@ -65,4 +65,21 @@
     }
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
+    private string GetExpirence(int year)
+    {
+        return $"{year} {GetPlural(year)}";
+    }
+    private string GetPlural(int year)
+    {
+        int number = Math.Abs(year);
+        if (number % 10 == 1 && number % 100 != 12)
+        {
+            return "год";
+        }
+        if (number % 10 >= 2 && number % 10 <= 4 && (number % 100 < 12 || number % 100 > 14))
+        {
+            return "года";  
+        }
+        return "лет";
+    }
 }
