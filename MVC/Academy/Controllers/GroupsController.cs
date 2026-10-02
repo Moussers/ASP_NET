@@ -27,7 +27,7 @@ public class GroupsController : Controller
         }
 
         var group = await _context.Groups
-            .FirstOrDefaultAsync(m => m.group_id == group_id);
+            .FirstOrDefaultAsync(m => m.group_ID == group_id);
         if (group == null)
         {
             return NotFound();
@@ -81,7 +81,7 @@ public class GroupsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int? group_id, [Bind("group_id,group_name,direction,weekdays,start_time,start_date")] Group group)
     {
-        if (group_id != group.group_id)
+        if (group_id != group.group_ID)
         {
             return NotFound();
         }
@@ -95,7 +95,7 @@ public class GroupsController : Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GroupExists(group.group_id))
+                if (!GroupExists(group.group_ID))
                 {
                     return NotFound();
                 }
@@ -118,7 +118,7 @@ public class GroupsController : Controller
         }
 
         var group = await _context.Groups
-            .FirstOrDefaultAsync(m => m.group_id == group_id);
+            .FirstOrDefaultAsync(m => m.group_ID == group_id);
         if (group == null)
         {
             return NotFound();
@@ -144,6 +144,6 @@ public class GroupsController : Controller
 
     private bool GroupExists(int? group_id)
     {
-        return _context.Groups.Any(e => e.group_id == group_id);
+        return _context.Groups.Any(e => e.group_ID == group_id);
     }
 }

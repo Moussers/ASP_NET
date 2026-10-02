@@ -27,7 +27,7 @@ public class TeachersController : Controller
         }
 
         var teacher = await _context.Teachers
-            .FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
+            .FirstOrDefaultAsync(m => m.teacher_ID == teacher_id);
         if (teacher == null)
         {
             return NotFound();
@@ -81,7 +81,7 @@ public class TeachersController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(short? teacher_id, [Bind("teacher_id,work_since,rate,last_name,first_name,middle_name,birth_date,email,phone,photo")] Teacher teacher)
     {
-        if (teacher_id != teacher.teacher_id)
+        if (teacher_id != teacher.teacher_ID)
         {
             return NotFound();
         }
@@ -95,7 +95,7 @@ public class TeachersController : Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeacherExists(teacher.teacher_id))
+                if (!TeacherExists(teacher.teacher_ID))
                 {
                     return NotFound();
                 }
@@ -118,7 +118,7 @@ public class TeachersController : Controller
         }
 
         var teacher = await _context.Teachers
-            .FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
+            .FirstOrDefaultAsync(m => m.teacher_ID == teacher_id);
         if (teacher == null)
         {
             return NotFound();
@@ -144,6 +144,6 @@ public class TeachersController : Controller
 
     private bool TeacherExists(short? teacher_id)
     {
-        return _context.Teachers.Any(e => e.teacher_id == teacher_id);
+        return _context.Teachers.Any(e => e.teacher_ID == teacher_id);
     }
 }

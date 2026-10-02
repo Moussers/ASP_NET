@@ -1,12 +1,15 @@
 ﻿using Academy.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
 {
     public class Group
     {
         [Key]
-        public int group_id { get; set; }
+        [Column("group_id")]
+        [Required]
+        public int group_ID { get; set; }
         [Required]
         [StringLength(10, MinimumLength = 5)]
         public string? group_name { get; set; }
