@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
@@ -10,9 +11,11 @@ namespace Academy.Models
         
         [Required]
         [ForeignKey(nameof(Group))]
+        [DisplayName("Группа")]
         public int group { get; set; }
 
         //      Navigation properties:
+        //[NotMapped]
         public Group Group { get; set; }
     }
 }

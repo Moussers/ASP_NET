@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Academy.Models
@@ -11,6 +12,7 @@ namespace Academy.Models
         [Required]
         [StringLength(50, MinimumLength = 2)]
         [Column(TypeName = "NVARCHAR(50)")]
+        [DisplayName("Название направления")]
         public string direction_name { get; set; }
 
         //          Navigation properties

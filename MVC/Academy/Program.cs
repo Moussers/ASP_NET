@@ -6,6 +6,8 @@ builder.Services.AddDbContext<AcademyContext>(options => options.UseSqlServer(co
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+//AddRazorRuntimeCompilation - решает проблему связанную с Index not found, также нужно скачать Microsft.AspNet.Mvc.Razor.RuntimeComplitation, так данная библиотека
+//содержит внутренний метод AddRazorRuntimeCompilation 
 
 var app = builder.Build();
 
