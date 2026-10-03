@@ -6,9 +6,13 @@ namespace Academy.Models
     public class Student: Human
     {
         [Key]
-        [Column("stud_id")]
+        public int stud_id { get; set; }
+        
         [Required]
-        public int stud_ID { get; set; }
-        public int? group { get; set; }
+        [ForeignKey(nameof(Group))]
+        public int group { get; set; }
+
+        //      Navigation properties:
+        public Group Group { get; set; }
     }
 }

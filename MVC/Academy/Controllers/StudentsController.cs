@@ -27,7 +27,7 @@ public class StudentsController : Controller
         }
 
         var student = await _context.Students
-            .FirstOrDefaultAsync(m => m.stud_ID == stud_id);
+            .FirstOrDefaultAsync(m => m.stud_id == stud_id);
         if (student == null)
         {
             return NotFound();
@@ -47,7 +47,7 @@ public class StudentsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("stud_id,group,last_name,first_name,middle_name,birth_date,email,phone,photo")] Student student)
+    public async Task<IActionResult> Create([Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
     {
         if (ModelState.IsValid)
         {
@@ -79,9 +79,9 @@ public class StudentsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? stud_id, [Bind("stud_id,group,last_name,first_name,middle_name,birth_date,email,phone,photo")] Student student)
+    public async Task<IActionResult> Edit(int? stud_id, [Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
     {
-        if (stud_id != student.stud_ID)
+        if (stud_id != student.stud_id)
         {
             return NotFound();
         }
@@ -95,7 +95,7 @@ public class StudentsController : Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StudentExists(student.stud_ID))
+                if (!StudentExists(student.stud_id))
                 {
                     return NotFound();
                 }
@@ -118,7 +118,7 @@ public class StudentsController : Controller
         }
 
         var student = await _context.Students
-            .FirstOrDefaultAsync(m => m.stud_ID == stud_id);
+            .FirstOrDefaultAsync(m => m.stud_id == stud_id);
         if (student == null)
         {
             return NotFound();
@@ -144,6 +144,6 @@ public class StudentsController : Controller
 
     private bool StudentExists(int? stud_id)
     {
-        return _context.Students.Any(e => e.stud_ID == stud_id);
+        return _context.Students.Any(e => e.stud_id == stud_id);
     }
 }

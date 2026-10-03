@@ -5,7 +5,7 @@ var connectionString = builder.Configuration.GetConnectionString("AcademyContext
 builder.Services.AddDbContext<AcademyContext>(options => options.UseSqlServer(connectionString));
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
 

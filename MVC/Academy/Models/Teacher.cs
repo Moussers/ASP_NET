@@ -1,16 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Academy.Models
 {
     public class Teacher: Human
     {
         [Key]
-        [Column("teacher_id")]
-        [Required]
-        public short teacher_ID { get; set; }
+        [Column("teacher_id", TypeName = "SMALLINT")]
+        public int teacher_id { get; set; }
+        //smallint - short
         public DateOnly work_since { get; set; }
+        
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "SMALLMONEY")]
         public decimal rate { get; set; }
+        //smallmoney - decimal
+
+        //Navigation properties:
+        public ICollection<TeachersDisciplinesRelation> DisplinesResations { get; set; } = default!;
     }
 }
