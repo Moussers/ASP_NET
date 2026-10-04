@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Academy.Models;
+using Microsoft.Data.SqlClient;
+using System.Numerics;
 
 public class TeachersController : Controller
 {
@@ -12,22 +14,36 @@ public class TeachersController : Controller
         _context = context;
     }
 
-    // GET: TEACHERS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(string sortOrder)    
     {
-        return View(await _context.Teachers.ToListAsync());
+        ViewData["LNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
+        ViewData["FNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
+        ViewData["MNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "middle_name_desc" : "";
+        ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        
+        IQueryable<Teacher> teachers = from teaher in _context.Teachers select teaher;
+        switch (sortOrder) 
+        {
+            case "last_name_desc":      teachers = teachers.OrderByDescending(t => t.last_name);       break;
+            case "first_name_desc":     teachers = teachers.OrderByDescending(t => t.first_name);      break;
+            case "middle_name_desc":    teachers = teachers.OrderByDescending(t => t.middle_name);     break;
+            case "date_desc":           teachers = teachers.OrderByDescending(t => t.birth_date);      break;
+            case "Date":                teachers = teachers.OrderBy(t => t.birth_date);                break;
+            default:                    teachers = teachers.OrderBy(t => t.last_name);                 break;
+        }
+        return View(await teachers.AsNoTracking().ToListAsync());
+        //return View(await _context.Teachers.ToListAsync());
     }
 
-    // GET: TEACHERS/Details/5
-    public async Task<IActionResult> Details(int? teacher_id)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (teacher_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var teacher = await _context.Teachers
-            .FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
+            .FirstOrDefaultAsync(m => m.teacher_id == id);
         if (teacher == null)
         {
             return NotFound();
@@ -36,15 +52,11 @@ public class TeachersController : Controller
         return View(teacher);
     }
 
-    // GET: TEACHERS/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: TEACHERS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("teacher_id,work_since,rate,DisplinesResations,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Teacher teacher)
@@ -58,15 +70,19 @@ public class TeachersController : Controller
         return View(teacher);
     }
 
-    // GET: TEACHERS/Edit/5
-    public async Task<IActionResult> Edit(int? teacher_id)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (teacher_id == null)
+        //в Edit тер€етс€ teacher_id
+        //–ешение проблемы: заменить на примере страницы Teachers заменить teacher_id на просто id,
+        //*Ќа примере Teachers. —истема переводит teacher_id в просто в id, в результате id
+        //тер€етс€ и teacher_id всегда будет равен null
+        if (id == null)
+            if (id == null)
         {
             return NotFound();
         }
 
-        var teacher = await _context.Teachers.FindAsync(teacher_id);
+        var teacher = await _context.Teachers.FindAsync(id);
         if (teacher == null)
         {
             return NotFound();
@@ -74,14 +90,11 @@ public class TeachersController : Controller
         return View(teacher);
     }
 
-    // POST: TEACHERS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? teacher_id, [Bind("teacher_id,work_since,rate,DisplinesResations,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Teacher teacher)
+    public async Task<IActionResult> Edit(int? id, [Bind("teacher_id,work_since,rate,DisplinesResations,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Teacher teacher)
     {
-        if (teacher_id != teacher.teacher_id)
+        if (id != teacher.teacher_id)
         {
             return NotFound();
         }
@@ -109,16 +122,15 @@ public class TeachersController : Controller
         return View(teacher);
     }
 
-    // GET: TEACHERS/Delete/5
-    public async Task<IActionResult> Delete(int? teacher_id)
+    public async Task<IActionResult> Delete(int? id)
     {
-        if (teacher_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var teacher = await _context.Teachers
-            .FirstOrDefaultAsync(m => m.teacher_id == teacher_id);
+            .FirstOrDefaultAsync(m => m.teacher_id == id);
         if (teacher == null)
         {
             return NotFound();
@@ -127,12 +139,11 @@ public class TeachersController : Controller
         return View(teacher);
     }
 
-    // POST: TEACHERS/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? teacher_id)
+    public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var teacher = await _context.Teachers.FindAsync(teacher_id);
+        var teacher = await _context.Teachers.FindAsync(id);
         if (teacher != null)
         {
             _context.Teachers.Remove(teacher);
@@ -142,8 +153,8 @@ public class TeachersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool TeacherExists(int? teacher_id)
+    private bool TeacherExists(int? id)
     {
-        return _context.Teachers.Any(e => e.teacher_id == teacher_id);
+        return _context.Teachers.Any(e => e.teacher_id == id);
     }
 }

@@ -12,22 +12,20 @@ public class DirectionsController : Controller
         _context = context;
     }
 
-    // GET: DIRECTIONS
     public async Task<IActionResult> Index()    
     {
         return View(await _context.Directions.ToListAsync());
     }
 
-    // GET: DIRECTIONS/Details/5
-    public async Task<IActionResult> Details(int? direction_id)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (direction_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var direction = await _context.Directions
-            .FirstOrDefaultAsync(m => m.direction_id == direction_id);
+            .FirstOrDefaultAsync(m => m.direction_id == id);
         if (direction == null)
         {
             return NotFound();
@@ -36,15 +34,11 @@ public class DirectionsController : Controller
         return View(direction);
     }
 
-    // GET: DIRECTIONS/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: DIRECTIONS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("direction_id,direction_name,Groups")] Direction direction)
@@ -58,15 +52,14 @@ public class DirectionsController : Controller
         return View(direction);
     }
 
-    // GET: DIRECTIONS/Edit/5
-    public async Task<IActionResult> Edit(int? direction_id)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (direction_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var direction = await _context.Directions.FindAsync(direction_id);
+        var direction = await _context.Directions.FindAsync(id);
         if (direction == null)
         {
             return NotFound();
@@ -74,14 +67,11 @@ public class DirectionsController : Controller
         return View(direction);
     }
 
-    // POST: DIRECTIONS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? direction_id, [Bind("direction_id,direction_name,Groups")] Direction direction)
+    public async Task<IActionResult> Edit(int? id, [Bind("direction_id,direction_name,Groups")] Direction direction)
     {
-        if (direction_id != direction.direction_id)
+        if (id != direction.direction_id)
         {
             return NotFound();
         }
@@ -109,16 +99,15 @@ public class DirectionsController : Controller
         return View(direction);
     }
 
-    // GET: DIRECTIONS/Delete/5
-    public async Task<IActionResult> Delete(int? direction_id)
+    public async Task<IActionResult> Delete(int? id)
     {
-        if (direction_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var direction = await _context.Directions
-            .FirstOrDefaultAsync(m => m.direction_id == direction_id);
+            .FirstOrDefaultAsync(m => m.direction_id == id);
         if (direction == null)
         {
             return NotFound();
@@ -127,12 +116,11 @@ public class DirectionsController : Controller
         return View(direction);
     }
 
-    // POST: DIRECTIONS/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? direction_id)
+    public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var direction = await _context.Directions.FindAsync(direction_id);
+        var direction = await _context.Directions.FindAsync(id);
         if (direction != null)
         {
             _context.Directions.Remove(direction);
@@ -142,8 +130,8 @@ public class DirectionsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool DirectionExists(int? direction_id)
+    private bool DirectionExists(int? id)
     {
-        return _context.Directions.Any(e => e.direction_id == direction_id);
+        return _context.Directions.Any(e => e.direction_id == id);
     }
 }

@@ -13,16 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.last_name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["LNameSortParam"]">@Html.DisplayNameFor(model => model.last_name)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.first_name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["FNameSortParam"]">@Html.DisplayNameFor(model => model.first_name)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.middle_name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MNameSortParam"]">@Html.DisplayNameFor(model => model.middle_name)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.birth_date)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.birth_date)</a>
             </th>
             @* <th>
                 @Html.DisplayNameFor(model => model.email)

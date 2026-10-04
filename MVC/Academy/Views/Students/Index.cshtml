@@ -13,16 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.last_name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["LNameSortParam"]">@Html.DisplayNameFor(model => model.last_name)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.first_name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["FNameSortParam"]">@Html.DisplayNameFor(model => model.first_name)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.middle_name)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MNameSortParam"]">@Html.DisplayNameFor(model => model.middle_name)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.birth_date)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.birth_date)</a>
             </th>
             @* <th>
                 @Html.DisplayNameFor(model => model.email)
@@ -37,7 +37,7 @@
                 @Html.DisplayNameFor(model => model.FullName)
             </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.group)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["GroupSortParam"]">@Html.DisplayNameFor(model => model.group)</a>
             </th>
             <th></th>
         </tr>
@@ -74,8 +74,8 @@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.stud_id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.stud_id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.stud_id">Delete</a>
+                    <a asp-action="Details" asp-route-id="@item.stud_id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.stud_id">Delete</a>
             </td>
         </tr>
 }

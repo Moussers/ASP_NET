@@ -17,16 +17,15 @@ public class DisciplinesController : Controller
         return View(await _context.Disciplines.ToListAsync());
     }
 
-    // GET: DISCIPLINES/Details/5
-    public async Task<IActionResult> Details(int? discipline_id)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (discipline_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var discipline = await _context.Disciplines
-            .FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
+            .FirstOrDefaultAsync(m => m.discipline_id == id);
         if (discipline == null)
         {
             return NotFound();
@@ -41,9 +40,6 @@ public class DisciplinesController : Controller
         return View();
     }
 
-    // POST: DISCIPLINES/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("discipline_id,discipline_name,number_of_lessons")] Discipline discipline)
@@ -57,15 +53,14 @@ public class DisciplinesController : Controller
         return View(discipline);
     }
 
-    // GET: DISCIPLINES/Edit/5
-    public async Task<IActionResult> Edit(int? discipline_id)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (discipline_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var discipline = await _context.Disciplines.FindAsync(discipline_id);
+        var discipline = await _context.Disciplines.FindAsync(id);
         if (discipline == null)
         {
             return NotFound();
@@ -73,14 +68,11 @@ public class DisciplinesController : Controller
         return View(discipline);
     }
 
-    // POST: DISCIPLINES/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? discipline_id, [Bind("discipline_id,discipline_name,number_of_lessons")] Discipline discipline)
+    public async Task<IActionResult> Edit(int? id, [Bind("discipline_id,discipline_name,number_of_lessons")] Discipline discipline)
     {
-        if (discipline_id != discipline.discipline_id)
+        if (id != discipline.discipline_id)
         {
             return NotFound();
         }
@@ -108,14 +100,13 @@ public class DisciplinesController : Controller
         return View(discipline);
     }
 
-    // GET: DISCIPLINES/Delete/5
-    public async Task<IActionResult> Delete(int? discipline_id)
+    public async Task<IActionResult> Delete(int? id)
     {
-        if (discipline_id == null)
+        if (id == null)
         {
             return NotFound();
         }
-        var discipline = await _context.Disciplines.FirstOrDefaultAsync(m => m.discipline_id == discipline_id);
+        var discipline = await _context.Disciplines.FirstOrDefaultAsync(m => m.discipline_id == id);
         if (discipline == null)
         {
             return NotFound();
@@ -124,12 +115,11 @@ public class DisciplinesController : Controller
         return View(discipline);
     }
 
-    // POST: DISCIPLINES/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? discipline_id)
+    public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var discipline = await _context.Disciplines.FindAsync(discipline_id);
+        var discipline = await _context.Disciplines.FindAsync(id);
         if (discipline != null)
         {
             _context.Disciplines.Remove(discipline);
@@ -138,8 +128,8 @@ public class DisciplinesController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool DisciplineExists(int? discipline_id)
+    private bool DisciplineExists(int? id)
     {
-        return _context.Disciplines.Any(e => e.discipline_id == discipline_id);
+        return _context.Disciplines.Any(e => e.discipline_id == id);
     }
 }

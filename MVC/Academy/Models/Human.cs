@@ -34,7 +34,7 @@ namespace Academy.Models
         [DisplayName("Почта")]
         public string? email { get; set; }
         //[Phone]
-        [DisplayName("Фото")]
+        [DisplayName("Номер телефона")]
         public string? phone { get; set; }
         [Column("photo", TypeName = "IMAGE")]
         [DisplayName("Фото")]

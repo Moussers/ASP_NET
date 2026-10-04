@@ -12,22 +12,20 @@ public class GroupsController : Controller
         _context = context;
     }
 
-    // GET: GROUPS
     public async Task<IActionResult> Index()    
     {
         return View(await _context.Groups.ToListAsync());
     }
 
-    // GET: GROUPS/Details/5
-    public async Task<IActionResult> Details(int? group_id)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (group_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var group = await _context.Groups
-            .FirstOrDefaultAsync(m => m.group_id == group_id);
+            .FirstOrDefaultAsync(m => m.group_id == id);
         if (group == null)
         {
             return NotFound();
@@ -42,9 +40,6 @@ public class GroupsController : Controller
         return View();
     }
 
-    // POST: GROUPS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("group_id,group_name,direction,learning_days,start_time,start_date,Direction,Students")] Group group)
@@ -58,15 +53,14 @@ public class GroupsController : Controller
         return View(group);
     }
 
-    // GET: GROUPS/Edit/5
-    public async Task<IActionResult> Edit(int? group_id)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (group_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var group = await _context.Groups.FindAsync(group_id);
+        var group = await _context.Groups.FindAsync(id);
         if (group == null)
         {
             return NotFound();
@@ -74,14 +68,11 @@ public class GroupsController : Controller
         return View(group);
     }
 
-    // POST: GROUPS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? group_id, [Bind("group_id,group_name,direction,learning_days,start_time,start_date,Direction,Students")] Group group)
+    public async Task<IActionResult> Edit(int? id, [Bind("group_id,group_name,direction,learning_days,start_time,start_date,Direction,Students")] Group group)
     {
-        if (group_id != group.group_id)
+        if (id != group.group_id)
         {
             return NotFound();
         }
@@ -109,16 +100,15 @@ public class GroupsController : Controller
         return View(group);
     }
 
-    // GET: GROUPS/Delete/5
-    public async Task<IActionResult> Delete(int? group_id)
+    public async Task<IActionResult> Delete(int? id)
     {
-        if (group_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var group = await _context.Groups
-            .FirstOrDefaultAsync(m => m.group_id == group_id);
+            .FirstOrDefaultAsync(m => m.group_id == id);
         if (group == null)
         {
             return NotFound();
@@ -127,12 +117,11 @@ public class GroupsController : Controller
         return View(group);
     }
 
-    // POST: GROUPS/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? group_id)
+    public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var group = await _context.Groups.FindAsync(group_id);
+        var group = await _context.Groups.FindAsync(id);
         if (group != null)
         {
             _context.Groups.Remove(group);
@@ -142,8 +131,8 @@ public class GroupsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool GroupExists(int? group_id)
+    private bool GroupExists(int? id)
     {
-        return _context.Groups.Any(e => e.group_id == group_id);
+        return _context.Groups.Any(e => e.group_id == id);
     }
 }

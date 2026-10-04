@@ -12,22 +12,42 @@ public class StudentsController : Controller
         _context = context;
     }
 
-    // GET: STUDENTS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(string sortOrder)    
     {
-        return View(await _context.Students.ToListAsync());
+        ViewData["LNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
+        ViewData["FNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
+        ViewData["MNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "middle_name_desc" : "";
+        ViewData["GroupSortParam"] = String.IsNullOrEmpty(sortOrder) ? "group_desc" : "";
+        ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+        IQueryable<Student> students = from student in _context.Students select student;
+        switch (sortOrder) 
+        {
+            case "last_name_desc":   students = students.OrderByDescending(s => s.last_name);           break;
+            case "first_name_desc":   students = students.OrderByDescending(s => s.first_name);         break;
+            case "middle_name_desc":   students = students.OrderByDescending(s => s.middle_name);       break;
+            case "date_desc":   students = students.OrderByDescending(s => s.birth_date);               break;
+            //OrderByDescending - сортировка по убыванию
+            case "group_desc":   students = students.OrderByDescending(s => s.group);                   break;
+            case "Date":        students = students.OrderBy(s => s.birth_date);                         break;
+            //OrderBy - сортировка по возрастанию
+            default: students = students.OrderBy(s => s.last_name);                                     break;
+            
+        }
+
+        return View(await students.AsNoTracking().ToListAsync());
+        //return View(await _context.Students.ToListAsync());
     }
 
-    // GET: STUDENTS/Details/5
-    public async Task<IActionResult> Details(int? stud_id)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (stud_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var student = await _context.Students
-            .FirstOrDefaultAsync(m => m.stud_id == stud_id);
+            .FirstOrDefaultAsync(m => m.stud_id == id);
         if (student == null)
         {
             return NotFound();
@@ -36,15 +56,11 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // GET: STUDENTS/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: STUDENTS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
@@ -58,15 +74,18 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // GET: STUDENTS/Edit/5
-    public async Task<IActionResult> Edit(int? stud_id)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (stud_id == null)
+        //в Edit теряется stud_id
+        //Решение проблемы: заменить на примере страницы Students заменить stud_id на просто id,
+        //*На примере Students. Система переводит stud_id в просто в id, в результате id
+        //теряется и stud_id всегда будет равен null
+        if (id == null)
         {
             return NotFound();
         }
 
-        var student = await _context.Students.FindAsync(stud_id);
+        var student = await _context.Students.FindAsync(id);
         if (student == null)
         {
             return NotFound();
@@ -74,14 +93,11 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // POST: STUDENTS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? stud_id, [Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
+    public async Task<IActionResult> Edit(int? id, [Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
     {
-        if (stud_id != student.stud_id)
+        if (id != student.stud_id)
         {
             return NotFound();
         }
@@ -109,16 +125,15 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // GET: STUDENTS/Delete/5
-    public async Task<IActionResult> Delete(int? stud_id)
+    public async Task<IActionResult> Delete(int? id)
     {
-        if (stud_id == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var student = await _context.Students
-            .FirstOrDefaultAsync(m => m.stud_id == stud_id);
+            .FirstOrDefaultAsync(m => m.stud_id == id);
         if (student == null)
         {
             return NotFound();
@@ -127,12 +142,11 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // POST: STUDENTS/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? stud_id)
+    public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var student = await _context.Students.FindAsync(stud_id);
+        var student = await _context.Students.FindAsync(id);
         if (student != null)
         {
             _context.Students.Remove(student);
@@ -142,8 +156,8 @@ public class StudentsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool StudentExists(int? stud_id)
+    private bool StudentExists(int? id)
     {
-        return _context.Students.Any(e => e.stud_id == stud_id);
+        return _context.Students.Any(e => e.stud_id == id);
     }
 }

@@ -9,20 +9,6 @@
 <div>
     <h4>Student</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.group)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.group)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Group)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Group)
-        </dd>
     </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.last_name)
@@ -65,6 +51,14 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.phone)
         </dd>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.group)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.group)
+        </dd>
+    </dl>
     </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.photo)
@@ -72,14 +66,14 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.photo)
         </dd>
-    </dl>
+    @* </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.FullName)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.FullName)
         </dd>
-    </dl>
+    </dl> *@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.stud_id">Edit</a> |
