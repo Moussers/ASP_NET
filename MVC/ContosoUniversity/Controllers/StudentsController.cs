@@ -12,21 +12,21 @@ public class StudentsController : Controller
         _context = context;
     }
 
-    // GET: STUDENTS
-    public async Task<IActionResult> Index(string sortOrder, string searchingString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
-        ViewData["CurrentFilter"] = searchingString;
+        ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Student> students = from student in _context.Students select student;
 
-        if (!String.IsNullOrEmpty(searchingString)) 
+        if (!String.IsNullOrEmpty(searchString)) 
         {
             students = students.Where
                 (
-                s => s.LastName.Contains(searchingString) ||
-                s.FirstName.Contains(searchingString)
+                s => 
+                s.LastName.Contains(searchString) ||
+                s.FirstName.Contains(searchString)
                 );
         }
 
@@ -43,7 +43,6 @@ public class StudentsController : Controller
         //return View(await _context.Students.ToListAsync());
     }
 
-    // GET: STUDENTS/Details/5
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -64,15 +63,11 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // GET: STUDENTS/Create
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: STUDENTS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("ID,LastName,FirstName,EnrollmentDate,Enrollments")] Student student)
@@ -86,7 +81,6 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // GET: STUDENTS/Edit/5
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -102,9 +96,6 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // POST: STUDENTS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,EnrollmentDate,Enrollments")] Student student)
@@ -137,7 +128,6 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // GET: STUDENTS/Delete/5
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -155,7 +145,6 @@ public class StudentsController : Controller
         return View(student);
     }
 
-    // POST: STUDENTS/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)

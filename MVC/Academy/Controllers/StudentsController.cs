@@ -12,15 +12,27 @@ public class StudentsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString)    
     {
         ViewData["LNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
         ViewData["FNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
         ViewData["MNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "middle_name_desc" : "";
         ViewData["GroupSortParam"] = String.IsNullOrEmpty(sortOrder) ? "group_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Student> students = from student in _context.Students select student;
+
+        if (!String.IsNullOrEmpty(searchString)) 
+        {
+            students = students.Where
+                (
+                s => 
+                s.last_name.Contains(searchString) ||
+                s.first_name.Contains(searchString)
+                );
+        }
+
         switch (sortOrder) 
         {
             case "last_name_desc":   students = students.OrderByDescending(s => s.last_name);           break;
