@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models;
+using ContosoUniversity;
 
 public class StudentsController : Controller
 {
@@ -12,10 +13,11 @@ public class StudentsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Student> students = from student in _context.Students select student;
@@ -37,7 +39,18 @@ public class StudentsController : Controller
             case "Date":        students = students.OrderBy(s => s.EnrollmentDate);             break;
             default:            students = students.OrderBy(s => s.LastName);                   break;
         }
-        return View(await students.AsNoTracking().ToListAsync());
+
+        int pageSize = 5;
+        return View
+            (
+                await PaginatedList<Student>.CreateAsync
+                (
+                    students.AsNoTracking(),
+                    pageNumber ?? 1,
+                    pageSize
+                )
+            );
+        //turn View(await students.AsNoTracking().ToListAsync());
         //Чтобы данные не помещались в кэш, применяется метод AsNoTracking(). При его применении
         //возвращаемые из запроса данные не кэшируются. 
         //return View(await _context.Students.ToListAsync());
