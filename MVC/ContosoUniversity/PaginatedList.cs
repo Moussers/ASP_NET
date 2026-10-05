@@ -15,7 +15,7 @@ namespace ContosoUniversity
             this.AddRange(items);
         }
         public bool HasPreviosPage => PageIndex > 1;
-        public bool HasNext6Page => PageIndex < TotalPages;
+        public bool HasNextPage => PageIndex < TotalPages;
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize) 
         {
             int count = await source.CountAsync();
