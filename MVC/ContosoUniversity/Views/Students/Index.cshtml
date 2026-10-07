@@ -89,8 +89,8 @@
             }
             else
             {
-                <a asp-action="Index" asp-route-pageNumber="@(i+1)">
-                    <div class="page">@(i + 1)</div>
+                <a asp-action="Index" asp-route-pageNumber="@(i+1)" class="page">
+                    @(i + 1)
                 </a>
             }
         }
