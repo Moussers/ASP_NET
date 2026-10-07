@@ -16,6 +16,7 @@ namespace Academy.Models
 
         //      Navigation properties:
         //[NotMapped]
-        public Group Group { get; set; }
+        public Group? Group { get; set; }
+        //? - объект может содержать null-значение
     }
 }

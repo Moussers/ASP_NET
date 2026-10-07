@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Academy.Models;
+using Academy;
 
 public class StudentsController : Controller
 {
@@ -12,13 +13,14 @@ public class StudentsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
     {
         ViewData["LNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
         ViewData["FNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
         ViewData["MNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "middle_name_desc" : "";
         ViewData["GroupSortParam"] = String.IsNullOrEmpty(sortOrder) ? "group_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Student> students = from student in _context.Students select student;
@@ -47,7 +49,17 @@ public class StudentsController : Controller
             
         }
 
-        return View(await students.AsNoTracking().ToListAsync());
+        int pageSize = 5;
+        return View
+            (
+                await PaginatedList<Student>.CreateAsync
+                (
+                    students.AsNoTracking(), 
+                    pageNumber ?? 1,
+                    pageSize
+                )
+            );
+        //return View(await students.AsNoTracking().ToListAsync());
         //return View(await _context.Students.ToListAsync());
     }
 
@@ -75,7 +87,7 @@ public class StudentsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("stud_id,group,Group,last_name,first_name,middle_name,birth_date,email,phone,photo,FullName")] Student student)
+    public async Task<IActionResult> Create([Bind("stud_id,group,last_name,first_name,middle_name,birth_date,email,phone,photo")] Student student)
     {
         if (ModelState.IsValid)
         {
