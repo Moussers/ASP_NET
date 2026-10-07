@@ -26,6 +26,7 @@
 }
 .current-page
 {
+    /*text-decoration: none;*/
     color: black;
     font-weight: 800;
     border: solid 1px;
