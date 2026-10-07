@@ -12,7 +12,9 @@ namespace ContosoUniversity
             //List<T> - знак T означает шаблон
             this.PageIndex = pageIndex;
             this.TotalPages = (int)Math.Ceiling((double)count/pageSize);
+
             this.AddRange(items);
+            
         }
         public bool HasPreviosPage => PageIndex > 1;
         public bool HasNextPage => PageIndex < TotalPages;
