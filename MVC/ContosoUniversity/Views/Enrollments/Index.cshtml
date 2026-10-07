@@ -1,4 +1,5 @@
-@model IEnumerable<ContosoUniversity.Models.Enrollment>
+@* @model IEnumerable<ContosoUniversity.Models.Enrollment> *@
+@model PaginatedList<Enrollment>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,20 +13,23 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.CourseID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StudentID)
+            </th> *@
+            <th>
+                @* @Html.DisplayNameFor(model => model.Grade) *@
+                Grade
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Grade)
+                @* @Html.DisplayNameFor(model => model.Course) *@
+                Course
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Course)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Student)
+                @* @Html.DisplayNameFor(model => model.Student) *@
+                Student
             </th>
             <th></th>
         </tr>
@@ -33,20 +37,20 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            @* <td>
                 @Html.DisplayFor(model => item.CourseID)
             </td>
             <td>
                 @Html.DisplayFor(model => item.StudentID)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(model => item.Grade)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Course)
+                @Html.DisplayFor(model => item.Course.Title)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Student)
+                @Html.DisplayFor(model => item.Student.LastName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EnrollmentID">Edit</a> |
@@ -57,3 +61,41 @@
 }
     </tbody>
 </table>
+
+@{
+    string prevDisabled = Model.HasPreviosPage ? "" : "disabled";
+    string nextDisabled = Model.HasNextPage ? "" : "disabled";
+}
+
+<div class="pagination-controls">
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Prev
+    </a>
+    <div>@Model.PageIndex</div>
+    <div class="pages">
+        @for (int i = 0; i < Model.TotalPages; i++)
+        {
+            @if (i + 1 == Model.PageIndex)
+            {
+                <a asp-action="Index" asp-route-pageNumber="@(i+1)">
+                    <div class="page current-page">@(i + 1)</div>
+                </a>
+            }
+            else
+            {
+                <a asp-action="Index" asp-route-pageNumber="@(i+1)" class="page">
+                    @(i + 1)
+                </a>
+            }
+        }
+    </div>
+    <a asp-action="Index"
+       asp-route-pageNumber="@(Model.PageIndex + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+       Next
+    </a>
+</div>
