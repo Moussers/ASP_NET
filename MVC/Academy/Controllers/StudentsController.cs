@@ -37,15 +37,15 @@ public class StudentsController : Controller
 
         switch (sortOrder) 
         {
-            case "last_name_desc":   students = students.OrderByDescending(s => s.last_name);           break;
-            case "first_name_desc":   students = students.OrderByDescending(s => s.first_name);         break;
-            case "middle_name_desc":   students = students.OrderByDescending(s => s.middle_name);       break;
-            case "date_desc":   students = students.OrderByDescending(s => s.birth_date);               break;
+            case "last_name_desc":      students = students.OrderByDescending(s => s.last_name);         break;
+            case "first_name_desc":     students = students.OrderByDescending(s => s.first_name);        break;
+            case "middle_name_desc":    students = students.OrderByDescending(s => s.middle_name);       break;
+            case "date_desc":           students = students.OrderByDescending(s => s.birth_date);        break;
             //OrderByDescending - сортировка по убыванию
-            case "group_desc":   students = students.OrderByDescending(s => s.group);                   break;
-            case "Date":        students = students.OrderBy(s => s.birth_date);                         break;
+            case "group_desc":          students = students.OrderByDescending(s => s.group);             break;
+            case "Date":                students = students.OrderBy(s => s.birth_date);                  break;
             //OrderBy - сортировка по возрастанию
-            default: students = students.OrderBy(s => s.last_name);                                     break;
+            default:                    students = students.OrderBy(s => s.last_name);                   break;
             
         }
 
@@ -60,6 +60,8 @@ public class StudentsController : Controller
                 )
             );
         //return View(await students.AsNoTracking().ToListAsync());
+        //Чтобы данные не помещались в кэш, применяется метод AsNoTracking(). При его применении
+        //возвращаемые из запроса данные не кэшируются. 
         //return View(await _context.Students.ToListAsync());
     }
 

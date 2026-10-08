@@ -12,9 +12,23 @@ public class DisciplinesController : Controller
     }
 
     // GET: DISCIPLINES
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(string sortOrder)    
     {
-        return View(await _context.Disciplines.ToListAsync());
+        ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["LessonSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lesson_desc" : "";
+        
+        IQueryable<Discipline> disciplines = from discipline in _context.Disciplines select discipline;
+        switch (sortOrder) 
+        {
+            case "name_desc":   disciplines = disciplines.OrderByDescending(d => d.discipline_name);    break;
+            //OrderByDescending - сортировка по убыванию
+            case "lesson_desc": disciplines = disciplines.OrderByDescending(d => d.number_of_lessons);  break;
+            default:            disciplines = disciplines.OrderBy(d => d.discipline_name);              break;
+            //OrderBy - сортировка по возрастанию
+        }
+
+        return View(await disciplines.AsNoTracking().ToListAsync());
+        //return View(await _context.Disciplines.ToListAsync());
     }
 
     public async Task<IActionResult> Details(int? id)
