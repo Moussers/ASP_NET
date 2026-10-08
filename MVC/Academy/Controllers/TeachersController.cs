@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Academy.Models;
 using Microsoft.Data.SqlClient;
 using System.Numerics;
+using Academy;
 
 public class TeachersController : Controller
 {
@@ -14,12 +15,13 @@ public class TeachersController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
     {
         ViewData["LNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
         ViewData["FNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
         ViewData["MNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "middle_name_desc" : "";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Teacher> teachers = from teaher in _context.Teachers select teaher;
@@ -43,7 +45,17 @@ public class TeachersController : Controller
             case "Date":                teachers = teachers.OrderBy(t => t.birth_date);                break;
             default:                    teachers = teachers.OrderBy(t => t.last_name);                 break;
         }
-        return View(await teachers.AsNoTracking().ToListAsync());
+        int pageSize = 5;
+        return View
+            (
+                await PaginatedList<Teacher>.CreateAsync
+                (
+                    teachers.AsNoTracking(),
+                    pageNumber ?? 1,
+                    pageSize
+                )
+            );
+        //return View(await teachers.AsNoTracking().ToListAsync());
         //return View(await _context.Teachers.ToListAsync());
     }
 
