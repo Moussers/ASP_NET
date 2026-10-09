@@ -49,7 +49,7 @@ public class StudentsController : Controller
             
         }
 
-        int pageSize = 5;
+        int pageSize = 2;
         return View
             (
                 await PaginatedList<Student>.CreateAsync
