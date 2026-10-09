@@ -155,7 +155,9 @@ namespace ContosoUniversity.Data
 				olivetto
 			};
 
-			context.AddRange(students);
+			//Пакетная обработка информации
+            context.SaveChanges();
+            context.AddRange(students);
 
 			var abercrombie = new Instructor
 			{
@@ -201,7 +203,8 @@ namespace ContosoUniversity.Data
 				zheng
 			};
 
-			context.AddRange(instructors);
+            context.SaveChanges();
+            context.AddRange(instructors);
 
 			var officeAssignments = new OfficeAssignment[]
 			{
@@ -216,7 +219,8 @@ namespace ContosoUniversity.Data
 					Location = "Thompson 304" }
 			};
 
-			context.AddRange(officeAssignments);
+            context.SaveChanges();
+            context.AddRange(officeAssignments);
 
 			var english = new Department
 			{
@@ -258,7 +262,8 @@ namespace ContosoUniversity.Data
 				economics
 			};
 
-			context.AddRange(departments);
+            context.SaveChanges();
+            context.AddRange(departments);
 
 			var chemistry = new Course
 			{
@@ -334,7 +339,8 @@ namespace ContosoUniversity.Data
 				literature
 			};
 
-			context.AddRange(courses);
+            context.SaveChanges();
+            context.AddRange(courses);
 
 			var enrollments = new Enrollment[]
 			{
