@@ -11,12 +11,18 @@ namespace ContosoUniversity.Models
         public string Name { get; set; }
         [DataType(DataType.Currency)]
         [Column(TypeName = "MONEY")]
-        public decimal Buddget { get; set; }
+        public decimal Budget { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [DisplayName("Дата запуска")]
         public DateTime StartDate { get; set; }
 
+        public int? InstructorID { get; set; }
+
+
         //Naviagation properties:
+        public Instructor Administrator { get; set; }
+        public ICollection<Course> Courses { get; set; }
     }
 }

@@ -6,6 +6,7 @@ namespace ContosoUniversity.Models
     public class OfficeAssignment
     {
         public int InstructorID { get; set; }
+        
         [StringLength(50)]
         [DisplayName("Расположение офиса")]
         public string Location { get; set; }

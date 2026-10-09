@@ -18,15 +18,18 @@ namespace ContosoUniversity.Models
         public string FirstName { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime HireDite { get; set; }
+        public DateTime HireDate { get; set; }
         //HireDite - дата трудоустройства
+
+        //Calculated properties:
         [DisplayName("Инструктор")]
         public string FullName 
         {
             get => $"{LastName} {FirstName}";
         }
-        
-        //TODO: Navigation properties:
 
+        //TODO: Navigation properties:
+        public ICollection<CourseAssignment> CourseAssignments { get; set; }
+        public OfficeAssignment OfficeAssignments { get; set; }
     }
 }
