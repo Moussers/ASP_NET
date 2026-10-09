@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Academy.Models;
+using Academy;
 
 public class DisciplinesController : Controller
 {
@@ -12,10 +13,11 @@ public class DisciplinesController : Controller
     }
 
     // GET: DISCIPLINES
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["LessonSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lesson_desc" : "";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
         
         IQueryable<Discipline> disciplines = from discipline in _context.Disciplines select discipline;
@@ -38,7 +40,17 @@ public class DisciplinesController : Controller
             //OrderBy - сортировка по возрастанию
         }
 
-        return View(await disciplines.AsNoTracking().ToListAsync());
+        int pageSie = 5;
+        return View
+        (
+            await PaginatedList<Discipline>.CreateAsync
+            (
+                disciplines.AsNoTracking(), 
+                pageNumber ?? 1,
+                pageSie
+            )
+        );
+        //return View(await disciplines.AsNoTracking().ToListAsync());
         //return View(await _context.Disciplines.AsNoTracking().ToListAsync());
         //return View(await _context.Disciplines.ToListAsync());
     }
