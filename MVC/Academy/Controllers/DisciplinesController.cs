@@ -12,12 +12,23 @@ public class DisciplinesController : Controller
     }
 
     // GET: DISCIPLINES
-    public async Task<IActionResult> Index(string sortOrder)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["LessonSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lesson_desc" : "";
+        ViewData["CurrentFilter"] = searchString;
         
         IQueryable<Discipline> disciplines = from discipline in _context.Disciplines select discipline;
+
+        if (!String.IsNullOrEmpty(searchString)) 
+        {
+            disciplines = disciplines.Where
+            (
+                s => 
+                s.discipline_name.Contains(searchString)
+            );
+        }
+
         switch (sortOrder) 
         {
             case "name_desc":   disciplines = disciplines.OrderByDescending(d => d.discipline_name);    break;
@@ -28,6 +39,7 @@ public class DisciplinesController : Controller
         }
 
         return View(await disciplines.AsNoTracking().ToListAsync());
+        //return View(await _context.Disciplines.AsNoTracking().ToListAsync());
         //return View(await _context.Disciplines.ToListAsync());
     }
 

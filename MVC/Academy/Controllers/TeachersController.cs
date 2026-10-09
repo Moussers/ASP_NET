@@ -45,6 +45,7 @@ public class TeachersController : Controller
             case "Date":                teachers = teachers.OrderBy(t => t.birth_date);                break;
             default:                    teachers = teachers.OrderBy(t => t.last_name);                 break;
         }
+
         int pageSize = 5;
         return View
             (
@@ -56,6 +57,7 @@ public class TeachersController : Controller
                 )
             );
         //return View(await teachers.AsNoTracking().ToListAsync());
+        //return View(await _context.Teachers.AsNoTracking().ToListAsync());
         //return View(await _context.Teachers.ToListAsync());
     }
 

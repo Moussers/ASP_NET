@@ -61,7 +61,8 @@ public class StudentsController : Controller
             );
         //return View(await students.AsNoTracking().ToListAsync());
         //Чтобы данные не помещались в кэш, применяется метод AsNoTracking(). При его применении
-        //возвращаемые из запроса данные не кэшируются. 
+        //возвращаемые из запроса данные не кэшируются.
+        //return View(await _context.Students.AsNoTracking().ToListAsync());
         //return View(await _context.Students.ToListAsync());
     }
 
