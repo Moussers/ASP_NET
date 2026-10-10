@@ -12,9 +12,23 @@ public class GroupsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(string sortOrder)    
     {
-        return View(await _context.Groups.ToListAsync());
+        ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+        IQueryable<Group> groups = from gr in _context.Groups select gr;
+
+        switch (sortOrder) 
+        {
+            case "name_desc":   groups = groups.OrderByDescending(g => g.group_name);   break;
+            case "date_desc":   groups = groups.OrderByDescending(g => g.start_time);   break;
+            case "Date":        groups = groups.OrderBy(g => g.start_time);             break;
+            default:            groups = groups.OrderBy(g => g.group_name);             break;
+        }
+
+        return View(await groups.AsNoTracking().ToListAsync());
+        //return View(await _context.Groups.ToListAsync());
     }
 
     public async Task<IActionResult> Details(int? id)

@@ -1,4 +1,4 @@
-@* @model IEnumerable<Academy.Models.Direction> *@
+п»ї@* @model IEnumerable<Academy.Models.Direction> *@
     @model PaginatedList<Direction>
 
 @{
@@ -10,13 +10,13 @@
 
     <form asp-action="Index" method="get">
         <div>
-            <label>Поиск по имени: <input type="search" name="searchString" value="@ViewData["CurrentFilter"]" /></label>
-            <input type="submit" value="Найти" class="btn btn-primary" />
-            <a asp-action="Index" class="btn btn-secondary">Сброс</a>
+            <label>РџРѕРёСЃРє РїРѕ РёРјРµРЅРё: <input type="search" name="searchString" value="@ViewData["CurrentFilter"]" /></label>
+            <input type="submit" value="РќР°Р№С‚Рё" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">РЎР±СЂРѕСЃ</a>
         </div>
     </form>
 
-    <a asp-action="Create" class="btn btn-primary">Добавить</a>
+    <a asp-action="Create" class="btn btn-primary">Р”РѕР±Р°РІРёС‚СЊ</a>
 </div>
 
 <div class="paginator">
@@ -66,7 +66,7 @@
             @if (i + 1 == Model.PageIndex)
             {
                 <a asp-action="Index" asp-route-pageNumber="@(i + 1)" class="page current-page">
-                    @* asp-route-pageNumber  - формирует ссылку на иконке, и при клике мы попадаем на нужную страницу*@
+                    @* asp-route-pageNumber  - С„РѕСЂРјРёСЂСѓРµС‚ СЃСЃС‹Р»РєСѓ РЅР° РёРєРѕРЅРєРµ, Рё РїСЂРё РєР»РёРєРµ РјС‹ РїРѕРїР°РґР°РµРј РЅР° РЅСѓР¶РЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ*@
                     @(i + 1)
                 </a>
             }
