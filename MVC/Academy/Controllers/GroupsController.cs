@@ -12,19 +12,34 @@ public class GroupsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DaysSortParam"] = String.IsNullOrEmpty(sortOrder) ? "day_desc" : "";
+        ViewData["TimeSortParam"] = sortOrder == "Time" ? "time_desc" : "Time";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Group> groups = from gr in _context.Groups select gr;
 
+        if (!String.IsNullOrEmpty(searchString)) 
+        {
+            groups = groups.Where
+                (
+                    g =>
+                    g.group_name.Contains(searchString)
+                );
+        }
+
         switch (sortOrder) 
         {
-            case "name_desc":   groups = groups.OrderByDescending(g => g.group_name);   break;
-            case "date_desc":   groups = groups.OrderByDescending(g => g.start_time);   break;
-            case "Date":        groups = groups.OrderBy(g => g.start_time);             break;
-            default:            groups = groups.OrderBy(g => g.group_name);             break;
+            case "name_desc":   groups = groups.OrderByDescending(g => g.group_name);       break;
+            case "day_desc":    groups = groups.OrderByDescending(g => g.learning_days);    break;
+            case "time_desc":   groups = groups.OrderByDescending(g => g.start_time);       break;
+            case "Time":        groups = groups.OrderBy(g => g.start_time);                 break;
+            case "date_desc":   groups = groups.OrderByDescending(g => g.start_date);       break;
+            case "Date":        groups = groups.OrderBy(g => g.start_date);                 break;
+            default:            groups = groups.OrderBy(g => g.group_name);                 break;
         }
 
         return View(await groups.AsNoTracking().ToListAsync());

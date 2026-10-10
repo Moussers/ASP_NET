@@ -4,11 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Groups</h1>
+<div class="controls">
+    <h1>Groups</h1>
 
-<p>
+    <form asp-action="Index" method="get">
+        <div>
+            <label>Поиск по названию группы: <input type="search" name="SearchString" value="@ViewData["CurrentFilter"]" /></label>
+            <input type="submit" value="Найти" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Сброс</a>
+        </div>
+    </form>
+
     <a asp-action="Create" class="btn btn-primary">Добавить</a>
-</p>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -19,10 +28,10 @@
                 @Html.DisplayNameFor(model => model.direction)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.learning_days)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DaysSortParam"]">@Html.DisplayNameFor(model => model.learning_days)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.start_time)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TimeSortParam"]">@Html.DisplayNameFor(model => model.start_time)</a>
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.start_date)</a>
