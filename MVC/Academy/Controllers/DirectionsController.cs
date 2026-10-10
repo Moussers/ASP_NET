@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Academy.Models;
+using Academy;
 
 public class DirectionsController : Controller
 {
@@ -12,9 +13,10 @@ public class DirectionsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Direction> directions = from direction in _context.Directions select direction;
@@ -29,7 +31,17 @@ public class DirectionsController : Controller
             default:            directions = directions.OrderBy(d => d.direction_name);             break;
         }
 
-        return View(await directions.AsNoTracking().ToListAsync());
+        int pageSize = 5;
+        return View
+            (
+                await PaginatedList<Direction>.CreateAsync
+                (
+                    directions.AsNoTracking(),
+                    pageNumber ?? 1,
+                    pageSize
+                )
+            );
+        //return View(await directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.ToListAsync());
     }
