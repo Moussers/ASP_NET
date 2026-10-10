@@ -12,9 +12,20 @@ public class DirectionsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(string sortOrder)    
     {
-        return View(await _context.Directions.ToListAsync());
+        ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        
+        IQueryable<Direction> directions = from direction in _context.Directions select direction;
+
+        switch (sortOrder) 
+        {
+            case "name_desc":   directions = directions.OrderByDescending(d => d.direction_name);   break;
+            default:            directions = directions.OrderBy(d => d.direction_name);             break;
+        }
+
+        return View(await directions.AsNoTracking().ToListAsync());
+        //return View(await _context.Directions.ToListAsync());
     }
 
     public async Task<IActionResult> Details(int? id)

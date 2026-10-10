@@ -57,6 +57,8 @@ public class TeachersController : Controller
                 )
             );
         //return View(await teachers.AsNoTracking().ToListAsync());
+        //Чтобы данные не помещались в кэш, применяется метод AsNoTracking(). При его применении
+        //возвращаемые из запроса данные не кэшируются.
         //return View(await _context.Teachers.AsNoTracking().ToListAsync());
         //return View(await _context.Teachers.ToListAsync());
     }

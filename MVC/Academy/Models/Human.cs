@@ -41,6 +41,7 @@ namespace Academy.Models
         public byte[]? photo { get; set; }
 
         //          Calculated properties:
+        [DisplayName("Ф.И.О")]
         public string FullName 
         {
             get => $"{last_name} {first_name} {middle_name}";
