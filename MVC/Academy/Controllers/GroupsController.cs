@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Academy.Models;
+using Academy;
 
 public class GroupsController : Controller
 {
@@ -12,12 +13,13 @@ public class GroupsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DaysSortParam"] = String.IsNullOrEmpty(sortOrder) ? "day_desc" : "";
         ViewData["TimeSortParam"] = sortOrder == "Time" ? "time_desc" : "Time";
         ViewData["DateSortParam"] = sortOrder == "Date" ? "date_desc" : "Date";
+        if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
 
         IQueryable<Group> groups = from gr in _context.Groups select gr;
@@ -42,7 +44,18 @@ public class GroupsController : Controller
             default:            groups = groups.OrderBy(g => g.group_name);                 break;
         }
 
-        return View(await groups.AsNoTracking().ToListAsync());
+        int pageSize = 5;
+        return View
+        (
+            await PaginatedList<Group>.CreateAsync
+            (
+                groups.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            )
+        );
+        //return View(await groups.AsNoTracking().ToListAsync());
+        //return View(await _context.Groups.AsNoTracking().ToListAsync());
         //return View(await _context.Groups.ToListAsync());
     }
 

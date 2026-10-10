@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Academy.Models.Group>
+﻿@* @model IEnumerable<Academy.Models.Group> *@
+    @model PaginatedList<Group>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,19 +23,24 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.group_name)</a>
+                @* <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.group_name)</a> *@
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">GroupName</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.direction)
+                @* @Html.DisplayNameFor(model => model.direction) *@
+                Direction
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DaysSortParam"]">@Html.DisplayNameFor(model => model.learning_days)</a>
+                @* <a asp-action="Index" asp-route-sortOrder="@ViewData["DaysSortParam"]">@Html.DisplayNameFor(model => model.learning_days)</a> *@
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DaysSortParam"]">LearningDays</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TimeSortParam"]">@Html.DisplayNameFor(model => model.start_time)</a>
+                @* <a asp-action="Index" asp-route-sortOrder="@ViewData["TimeSortParam"]">@Html.DisplayNameFor(model => model.start_time)</a> *@
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TimeSortParam"]">StartTime</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.start_date)</a>
+                @* <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">@Html.DisplayNameFor(model => model.start_date)</a> *@
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParam"]">StartDate</a>
             </th>
             <th></th>
         </tr>
@@ -73,3 +79,24 @@
 }
     </tbody>
 </table>
+
+@{
+    string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    string nextDisabled = Model.HasNextPage ? "" : "disabled";
+}
+
+<a asp-action="Index" 
+    asp-route-pageNumber="@(Model.PageIndex - 1)"
+    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    class="btn btn-default @prevDisabled"
+>
+    Prev
+</a>
+
+<a asp-action="Index" 
+    asp-route-pageNumber="@(Model.PageIndex + 1)"
+    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+    class="btn btn-default @nextDisabled"
+>
+    Next
+</a>
