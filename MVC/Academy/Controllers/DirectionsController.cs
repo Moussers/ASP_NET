@@ -12,11 +12,16 @@ public class DirectionsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-        
+        ViewData["CurrentFilter"] = searchString;
+
         IQueryable<Direction> directions = from direction in _context.Directions select direction;
+        if (!String.IsNullOrEmpty(searchString)) 
+        {
+            directions = directions.Where(d => d.direction_name.Contains(searchString));
+        }
 
         switch (sortOrder) 
         {
@@ -25,6 +30,7 @@ public class DirectionsController : Controller
         }
 
         return View(await directions.AsNoTracking().ToListAsync());
+        //return View(await _context.Directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.ToListAsync());
     }
 
