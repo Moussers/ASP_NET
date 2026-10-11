@@ -13,7 +13,7 @@ public class DirectionsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber, int? id, int? groupID)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         if (searchString != null) pageNumber = 1;
@@ -32,15 +32,39 @@ public class DirectionsController : Controller
         }
 
         int pageSize = 5;
-        return View
-            (
-                await PaginatedList<Direction>.CreateAsync
-                (
-                    directions.AsNoTracking(),
-                    pageNumber ?? 1,
-                    pageSize
-                )
-            );
+        Academy.Models.ViewModels.DirectionIndexData viewModel = new Academy.Models.ViewModels.DirectionIndexData();
+        viewModel.Directions = await _context.Directions
+            .Include(d => d.Groups)
+            //ThenInclude - прокладывает связь в следущую таблицу через вторичный ключ (foreign key), который являлся
+            //ссылкой на другую таблице, где это ключ является основным (primary key)
+            //Если таблице нет вторичных ключей (foreign keys), тогда мы её подключаем через Include
+            .AsNoTracking()
+            .OrderBy(d => d.direction_name)
+            .ToListAsync();
+
+        if (id != null)
+        {
+            ViewData["DirectionID"] = id.Value;
+            Direction direction = viewModel.Directions.Where(i => i.direction_id == id.Value).Single();
+            viewModel.Groups = direction.Groups;
+        }
+
+        if (groupID != null)
+        {
+            ViewData["GroupID"] = groupID.Value;
+            viewModel.Groups = viewModel.Groups.Where(g => g.group_id == groupID);
+        }
+        return View(viewModel);
+        //return View
+        //    (
+        //        await PaginatedList<Direction>.CreateAsync
+        //        (
+        //            directions.AsNoTracking(),
+        //            pageNumber ?? 1,
+        //            pageSize
+        //        )
+        //    );
+
         //return View(await directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.ToListAsync());
