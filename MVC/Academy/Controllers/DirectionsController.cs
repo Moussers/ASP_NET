@@ -13,26 +13,35 @@ public class DirectionsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber, int? id, int? groupID)    
     {
+        Academy.Models.ViewModels.DirectionIndexData viewModel = new Academy.Models.ViewModels.DirectionIndexData();
+        viewModel.Directions = await _context.Directions.Include(d => d.Groups).AsNoTracking().ToListAsync();
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         if (searchString != null) pageNumber = 1;
         ViewData["CurrentFilter"] = searchString;
 
-        IQueryable<Direction> directions = from direction in _context.Directions select direction;
+        if (id != null)
+        {
+            ViewData["DirectionID"] = id.Value;
+            Direction direction = viewModel.Directions.Where(i => i.direction_id == id.Value).Single();
+            viewModel.Groups = direction.Groups;
+
+        }
+
+       /* IQueryable<Direction> directions = from direction in _context.Directions select direction;
         if (!String.IsNullOrEmpty(searchString)) 
         {
             directions = directions.Where(d => d.direction_name.Contains(searchString));
         }
-
         switch (sortOrder) 
         {
             case "name_desc":   directions = directions.OrderByDescending(d => d.direction_name);   break;
             default:            directions = directions.OrderBy(d => d.direction_name);             break;
-        }
+        }*/
 
-        int pageSize = 5;
-        return View
+        //int pageSize = 5;
+       /* return View
             (
                 await PaginatedList<Direction>.CreateAsync
                 (
@@ -40,10 +49,11 @@ public class DirectionsController : Controller
                     pageNumber ?? 1,
                     pageSize
                 )
-            );
+            );*/
         //return View(await directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.AsNoTracking().ToListAsync());
         //return View(await _context.Directions.ToListAsync());
+        return View(viewModel);
     }
 
     public async Task<IActionResult> Details(int? id)

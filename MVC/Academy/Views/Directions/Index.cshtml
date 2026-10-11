@@ -1,5 +1,6 @@
 ﻿@* @model IEnumerable<Academy.Models.Direction> *@
-    @model PaginatedList<Direction>
+   @* @model PaginatedList<Direction>*@
+@model Academy.Models.ViewModels.DirectionIndexData
 
 @{
     ViewData["Title"] = "Index";
@@ -31,23 +32,34 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) {
-            <tr>
+                @foreach( var item in Model.Directions)
+                {
+                string selectedRow = "";
+                if (item.direction_id == (int?)ViewData["DirectionID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
                 <td>
                     @Html.DisplayFor(model => item.direction_name)
                 </td>
                 <td>
+                    <a asp-action="Index" asp-route-id="@item.direction_id">Select</a> |
                     <a asp-action="Edit" asp-route-id="@item.direction_id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.direction_id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.direction_id">Delete</a>
                 </td>
+                @* <td>
+                    @foreach(var gr in item.Groups)
+                    {
+                    @gr.group_name
+                   
+                    }
+                </td> *@
             </tr>
             }
         </tbody>
     </table>
 </div>
 
-@{
+@*@{
     string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
     string nextDisabled = Model.HasNextPage ? "" : "disabled";
 }
@@ -60,14 +72,14 @@
         Prev
     </a>
     @* <div>@Model.PageIndex</div> *@
-    <div class="pages">
+  @*  <div class="pages">
         @for (int i = 0; i < Model.TotalPages; i++)
         {
             @if (i + 1 == Model.PageIndex)
             {
                 <a asp-action="Index" asp-route-pageNumber="@(i + 1)" class="page current-page">
                     @* asp-route-pageNumber  - формирует ссылку на иконке, и при клике мы попадаем на нужную страницу*@
-                    @(i + 1)
+@*                    @(i + 1)
                 </a>
             }
             else
@@ -84,4 +96,26 @@
         class="btn btn-default @nextDisabled">
         Next
     </a>
-</div>
+</div>*@
+
+@if (Model.Groups != null)
+{
+    <h3>Группы для данного направления:</h3>
+    <table>
+        <thead>
+            <tr>Name</tr>
+        </thead>
+
+        <tbody>
+            @foreach (Group gr in Model.Groups)
+            {
+                string selectedRow = "";
+                if (gr.group_id == (int?)ViewData["DirectionID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>@Html.ActionLink("Select", "Index", new { groupID = gr.group_id })</td>
+                    <td>@gr.group_name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
