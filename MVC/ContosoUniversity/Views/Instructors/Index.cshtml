@@ -79,9 +79,11 @@
     <h3>Курсы, которые ведёт выбранный инструктор:</h3> 
     <table>
         <thead>
-            <tr>Number </tr>
-            <tr>Title </tr>
-            <tr>Department</tr>
+            <tr>
+                <th>Number </th>
+                <th>Title </th>
+                <th>Department</th>
+            </tr>
         </thead>
 
         <tbody>
@@ -94,6 +96,29 @@
                     <td>@course.CourseID</td>
                     <td>@course.Title</td>
                     <td>@course.Department.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.Enrollments != null)
+{
+    <h3>Студенты, прошедшые курс</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Студент</th>
+                <th>Оценка</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach(Enrollment enrollment in Model.Enrollments)
+            {
+                <tr>
+                    <td>@enrollment.Student.FullName</td>
+                    <td>@enrollment.Grade</td>
                 </tr>
             }
         </tbody>
