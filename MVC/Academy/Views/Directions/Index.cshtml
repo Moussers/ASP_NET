@@ -3,7 +3,7 @@
 @model Academy.Models.ViewModels.DirectionIndexData
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Directions";
 }
 
 <div class="controls">
@@ -93,10 +93,12 @@
 
 @if (Model.Groups != null)
 {
-    <h3>Курсы которые ведёт выбранный инструктор:</h3>
+    <h3>Группы по выбранному направлению:</h3>
     <table>
         <thead>
-            <tr>Название группы</tr>
+            <tr>
+                <th>Название группы</th>
+            </tr>
         </thead>
 
         <tbody>

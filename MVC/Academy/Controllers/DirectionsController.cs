@@ -32,11 +32,12 @@ public class DirectionsController : Controller
         }
 
         int pageSize = 5;
+
         Academy.Models.ViewModels.DirectionIndexData viewModel = new Academy.Models.ViewModels.DirectionIndexData();
         viewModel.Directions = await _context.Directions
             .Include(d => d.Groups)
             //ThenInclude - прокладывает связь в следущую таблицу через вторичный ключ (foreign key), который являлся
-            //ссылкой на другую таблице, где это ключ является основным (primary key)
+            //ссылкой на другую таблицу, где этот ключ является основным (primary key)
             //Если таблице нет вторичных ключей (foreign keys), тогда мы её подключаем через Include
             .AsNoTracking()
             .OrderBy(d => d.direction_name)

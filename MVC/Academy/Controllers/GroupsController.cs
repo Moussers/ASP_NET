@@ -13,7 +13,7 @@ public class GroupsController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber, int? id, int? studentID)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DaysSortParam"] = String.IsNullOrEmpty(sortOrder) ? "day_desc" : "";
@@ -45,15 +45,38 @@ public class GroupsController : Controller
         }
 
         int pageSize = 5;
-        return View
-        (
-            await PaginatedList<Group>.CreateAsync
-            (
-                groups.AsNoTracking(),
-                pageNumber ?? 1,
-                pageSize
-            )
-        );
+        Academy.Models.ViewModels.GroupIndexData viewModel = new Academy.Models.ViewModels.GroupIndexData();
+        viewModel.Groups = await _context.Groups
+            .Include(s => s.Students)
+            .Include(d => d.Direction)
+            //Include - позволяет брать данные через объект класса на который нет внешних ключей (ссылок) (foreign-key)
+            .AsNoTracking()
+            .OrderBy(s => s.group_name)
+            .ToListAsync();
+
+        if (id != null) 
+        {
+            ViewData["GroupID"] = id.Value;
+            Group group = viewModel.Groups.Where(i => i.group_id == id.Value).Single();
+            viewModel.Students = group.Students;
+        }
+
+        if (studentID != null) 
+        {
+            ViewData["StudentID"] = studentID.Value;
+            viewModel.Students = viewModel.Students.Where(s => s.stud_id == studentID);
+        }
+
+        return View(viewModel);
+        //return View
+        //(
+        //    await PaginatedList<Group>.CreateAsync
+        //    (
+        //        groups.AsNoTracking(),
+        //        pageNumber ?? 1,
+        //        pageSize
+        //    )
+        //);
         //return View(await groups.AsNoTracking().ToListAsync());
         //return View(await _context.Groups.AsNoTracking().ToListAsync());
         //return View(await _context.Groups.ToListAsync());
