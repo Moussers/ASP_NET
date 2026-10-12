@@ -15,7 +15,7 @@ public class TeachersController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber, int? id, int? disciplineID )    
     {
         ViewData["LNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "last_name_desc" : "";
         ViewData["FNameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "first_name_desc" : "";
@@ -47,15 +47,37 @@ public class TeachersController : Controller
         }
 
         int pageSize = 5;
-        return View
-            (
-                await PaginatedList<Teacher>.CreateAsync
-                (
-                    teachers.AsNoTracking(),
-                    pageNumber ?? 1,
-                    pageSize
-                )
-            );
+        Academy.Models.ViewModels.TeacherIndexData viewModel = new Academy.Models.ViewModels.TeacherIndexData();
+        viewModel.Teachers = await _context.Teachers
+            .Include(dr => dr.DisplinesResations)
+                .ThenInclude(d => d.Discipline)
+            .AsNoTracking()
+            .OrderBy(t => t.last_name)
+            .ToListAsync();
+
+        if (id != null) 
+        {
+            ViewData["TeacherID"] = id.Value;
+            Teacher teacher = viewModel.Teachers.Where(i => i.teacher_id == id.Value).Single();
+            viewModel.Disciplines = teacher.DisplinesResations.Select(dr => dr.Discipline);
+        }
+
+        if (disciplineID != null) 
+        {
+            ViewData["DisciplineID"] = disciplineID.Value;
+            viewModel.Disciplines = viewModel.Disciplines.Where(d => d.discipline_id == disciplineID);
+        }
+
+        return View(viewModel);
+        //return View
+        //    (
+        //        await PaginatedList<Teacher>.CreateAsync
+        //        (
+        //            teachers.AsNoTracking(),
+        //            pageNumber ?? 1,
+        //            pageSize
+        //        )
+        //    );
         //return View(await teachers.AsNoTracking().ToListAsync());
         //Чтобы данные не помещались в кэш, применяется метод AsNoTracking(). При его применении
         //возвращаемые из запроса данные не кэшируются.

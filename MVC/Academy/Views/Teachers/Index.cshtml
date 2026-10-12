@@ -1,5 +1,6 @@
 ﻿@* @model IEnumerable<Academy.Models.Teacher> *@
-@model PaginatedList<Teacher>
+@* @model PaginatedList<Teacher> *@
+@model Academy.Models.ViewModels.TeacherIndexData
 
 @{
     ViewData["Title"] = "Teachers";
@@ -58,47 +59,51 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => item.last_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.first_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.middle_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.birth_date)
-                </td>
+            @foreach (var item in Model.Teachers) 
+            {
+                string selectedRow = "";
+                if (item.teacher_id == (int?)ViewData["TeacherID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.DisplayFor(model => item.last_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.first_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.middle_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.birth_date)
+                    </td>
                 @* <td>
-                @Html.DisplayFor(model => item.email)
-                </td>
-                <td>
-                @Html.DisplayFor(model => item.phone)
-                </td>
-                <td>
-                @Html.DisplayFor(model => item.photo)
-                </td>
-                <td>
-                @Html.DisplayFor(model => item.work_since)
-                </td>
-                <td>
-                @Html.DisplayFor(model => item.rate)
-                </td> *@
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.teacher_id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.teacher_id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.teacher_id">Delete</a>
-                </td>
-            </tr>
+                    @Html.DisplayFor(model => item.email)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(model => item.phone)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(model => item.photo)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(model => item.work_since)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(model => item.rate)
+                    </td> *@
+                    <td>
+                        <a asp-action="Index" asp-route-id="@item.teacher_id">Select</a> |
+                        <a asp-action="Edit" asp-route-id="@item.teacher_id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.teacher_id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.teacher_id">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
 
-@{
+@* @{
     string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
     string nextDisabled = Model.HasNextPage ? "" : "disabled";
 }
@@ -111,14 +116,14 @@
         Prev
     </a>
     @* <div>@Model.PageIndex</div> *@
-    <div class="pages">
+    @* <div class="pages">
         @for (int i = 0; i < Model.TotalPages; i++)
         {
             @if (i + 1 == Model.PageIndex)
             {
                 <a asp-action="Index" asp-route-pageNumber="@(i + 1)" class="page current-page">
                     @* asp-route-pageNumber  - формирует ссылку на иконке, и при клике мы попадаем на нужную страницу*@
-                    @(i + 1)
+                    @* (i + 1)
                 </a>
             }
             else
@@ -135,5 +140,28 @@
         class="btn btn-default @nextDisabled">
         Next
     </a>
-</div>
+</div> *@
 
+@if (Model.Disciplines != null)
+{
+    <h3>Дисциплины которые видет выбранный преподователь:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Название дисциплины</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Discipline discipline in Model.Disciplines)
+            {
+                string selectedRow = "";
+                if (discipline.discipline_id == (int?)ViewData["DisciplineID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>@Html.ActionLink("Select", "Index", new {disciplineID = discipline.discipline_id})</td>
+                    <td>@discipline.discipline_name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
