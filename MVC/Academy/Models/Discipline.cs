@@ -20,5 +20,12 @@ namespace Academy.Models
         [DisplayName("Количество занятий")]
         public int number_of_lessons { get; set; }
         //tinyint - byte
+
+        //Navigation properties:
+        public ICollection<TeachersDisciplinesRelation> TeachersRelations { get; set; }
+        //ссылка на связывающий класс TeachersDisciplinesRelation, который связывает
+        //классы teacher и discipline
+        //работает по принципу метода JOIN в SQL
+
     }
 }

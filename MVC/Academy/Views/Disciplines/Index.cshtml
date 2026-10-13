@@ -1,5 +1,6 @@
 ﻿@* @model IEnumerable<Academy.Models.Discipline> *@
-    @model PaginatedList<Discipline>
+@* @model PaginatedList<Discipline> *@
+@model Academy.Models.ViewModels.DiscplineIndexData
 
 @{
     ViewData["Title"] = "Disciplines";
@@ -35,26 +36,30 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => item.discipline_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => item.number_of_lessons)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.discipline_id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.discipline_id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.discipline_id">Delete</a>
-                </td>
-            </tr>
+            @foreach (var item in Model.Disciplines) 
+            {
+                string selectedRow = "";
+                if (item.discipline_id == (int?)ViewData["DisciplineID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.DisplayFor(model => item.discipline_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.number_of_lessons)
+                    </td>
+                    <td>
+                        <a asp-action="Index" asp-route-id="@item.discipline_id">Select</a> |
+                        <a asp-action="Edit" asp-route-id="@item.discipline_id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.discipline_id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.discipline_id">Delete</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
 
-@{
+@* @{
     string prevDisabled = Model.HasPreviousPage ? "" : "disabled";
     string nextDisabled = Model.HasNextPage ? "" : "disabled";
 }
@@ -66,7 +71,7 @@
         class="btn btn-default @prevDisabled">
         Prev
     </a>
-    @* <div>@Model.PageIndex</div> *@
+    <div>@Model.PageIndex</div>
     <div class="pages">
         @for (int i = 0; i < Model.TotalPages; i++)
         {
@@ -74,7 +79,7 @@
             {
                 <a asp-action="Index" asp-route-pageNumber="@(i + 1)" class="page current-page">
                     @* asp-route-pageNumber  - формирует ссылку на иконке, и при клике мы попадаем на нужную страницу*@
-                    @(i + 1)
+                    @* @(i + 1)
                 </a>
             }
             else
@@ -91,4 +96,32 @@
         class="btn btn-default @nextDisabled">
         Next
     </a>
-</div>
+</div> *@
+
+@if (Model.Teachers != null)
+{
+    <h3>Переодователи которые ведут выбранный курс:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (Teacher teacher in Model.Teachers)
+            {
+                string selectedRow = "";
+                if (teacher.teacher_id == (int?)ViewData["TeacherID"]) selectedRow = "table-success";
+                <tr class="@selectedRow">
+                    <td>@Html.ActionLink("Select", "Index", new {teacherID = teacher.teacher_id})</td>
+                    <td>@teacher.last_name</td>
+                    <td>@teacher.first_name</td>
+                    <td>@teacher.middle_name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

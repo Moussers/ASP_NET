@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Academy.Models;
 using Academy;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Globalization;
+using System.Diagnostics.Contracts;
 
 public class DisciplinesController : Controller
 {
@@ -12,8 +15,7 @@ public class DisciplinesController : Controller
         _context = context;
     }
 
-    // GET: DISCIPLINES
-    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber)    
+    public async Task<IActionResult> Index(string sortOrder, string searchString, int? pageNumber, int? id, int? teacherID)    
     {
         ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["LessonSortParam"] = String.IsNullOrEmpty(sortOrder) ? "lesson_desc" : "";
@@ -40,16 +42,38 @@ public class DisciplinesController : Controller
             //OrderBy - сортировка по возрастанию
         }
 
-        int pageSie = 5;
-        return View
-        (
-            await PaginatedList<Discipline>.CreateAsync
-            (
-                disciplines.AsNoTracking(), 
-                pageNumber ?? 1,
-                pageSie
-            )
-        );
+        int pageSize = 5;
+        Academy.Models.ViewModels.DiscplineIndexData viewModel = new Academy.Models.ViewModels.DiscplineIndexData();
+        viewModel.Disciplines = await _context.Disciplines
+            .Include(tr => tr.TeachersRelations)
+                .ThenInclude(t => t.Teacher)
+            .AsNoTracking()
+            .OrderBy(d => d.discipline_name)
+            .ToListAsync();
+
+        if (id != null) 
+        {
+            ViewData["DisciplineID"] = id.Value;
+            Discipline discipline = viewModel.Disciplines.Where(i => i.discipline_id == id.Value).Single();
+            viewModel.Teachers = discipline.TeachersRelations.Select(tr => tr.Teacher);
+        }
+
+        if (teacherID != null) 
+        {
+            ViewData["TeacherID"] = teacherID.Value;
+            viewModel.Teachers = viewModel.Teachers.Where(t => t.teacher_id == teacherID);
+        }
+
+        return View(viewModel);
+        //return View
+        //(
+        //    await PaginatedList<Discipline>.CreateAsync
+        //    (
+        //        disciplines.AsNoTracking(), 
+        //        pageNumber ?? 1,
+        //        pageSize
+        //    )
+        //);
         //return View(await disciplines.AsNoTracking().ToListAsync());
         //return View(await _context.Disciplines.AsNoTracking().ToListAsync());
         //return View(await _context.Disciplines.ToListAsync());
@@ -72,7 +96,6 @@ public class DisciplinesController : Controller
         return View(discipline);
     }
 
-    // GET: DISCIPLINES/Create
     public IActionResult Create()
     {
         return View();

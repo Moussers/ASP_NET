@@ -49,7 +49,7 @@ public class TeachersController : Controller
         int pageSize = 5;
         Academy.Models.ViewModels.TeacherIndexData viewModel = new Academy.Models.ViewModels.TeacherIndexData();
         viewModel.Teachers = await _context.Teachers
-            .Include(dr => dr.DisplinesResations)
+            .Include(dr => dr.DisplinesRelations)
                 .ThenInclude(d => d.Discipline)
             .AsNoTracking()
             .OrderBy(t => t.last_name)
@@ -59,7 +59,7 @@ public class TeachersController : Controller
         {
             ViewData["TeacherID"] = id.Value;
             Teacher teacher = viewModel.Teachers.Where(i => i.teacher_id == id.Value).Single();
-            viewModel.Disciplines = teacher.DisplinesResations.Select(dr => dr.Discipline);
+            viewModel.Disciplines = teacher.DisplinesRelations.Select(dr => dr.Discipline);
         }
 
         if (disciplineID != null) 

@@ -51,7 +51,7 @@ public class GroupsController : Controller
             .Include(d => d.Direction)
             //Include - позволяет брать данные через объект класса на который нет внешних ключей (ссылок) (foreign-key)
             .AsNoTracking()
-            .OrderBy(s => s.group_name)
+            .OrderBy(g => g.group_name)
             .ToListAsync();
 
         if (id != null) 

@@ -17,6 +17,6 @@ namespace Academy.Models
         //smallmoney - decimal
 
         //Navigation properties:
-        public ICollection<TeachersDisciplinesRelation> DisplinesResations { get; set; } = default!;
+        public ICollection<TeachersDisciplinesRelation> DisplinesRelations { get; set; } = default!;
     }
 }
