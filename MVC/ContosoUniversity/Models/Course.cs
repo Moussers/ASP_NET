@@ -15,8 +15,9 @@ namespace ContosoUniversity.Models
         public int DepartmentID { get; set; }
 
         //Navigation properties:
-        public ICollection<Enrollment> Enrollments { get; set; } = null;
-        public Department Department { get; set; } = null;
-        public ICollection<Instructor> Instructors { get; set; } = null;
+        public ICollection<Enrollment>? Enrollments { get; set; }
+        public Department? Department { get; set; }
+        //? - объект может принимать null (nullable-тип)
+        public ICollection<Instructor>? Instructors { get; set; }
     }
 }
