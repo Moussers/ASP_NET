@@ -37,7 +37,9 @@ namespace ContosoUniversity.Controllers
             {
                 return NotFound();
             }
-
+            course.Department = _context.Departments.Where(d => d.DepartmentID == course.DepartmentID).FirstOrDefaultAsync().Result;
+            //FirstOrDefaultAsync - возвращает первый объект
+            //Result - возвращает перменную из функции
             return View(course);
         }
 
@@ -79,7 +81,7 @@ namespace ContosoUniversity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseID,Title,Credits")] Course course)
+        public async Task<IActionResult> Edit(int id, [Bind("CourseID,Title,Credits,DepartmentID")] Course course)
         {
             if (id != course.CourseID)
             {
