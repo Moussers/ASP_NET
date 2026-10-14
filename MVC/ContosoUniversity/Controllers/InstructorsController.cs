@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ContosoUniversity.Models;
+using ContosoUniversity.Models.ViewModels;
 
 public class InstructorsController : Controller
 {
@@ -94,48 +95,31 @@ public class InstructorsController : Controller
         var instructor = await _context
                                 .Instructors
                                 .Include(i => i.OfficeAssignments)
+                                .Include(i => i.CourseAssignments)
+                                    .ThenInclude(ca => ca.Course)
                                 .AsNoTracking()
                                 .FirstOrDefaultAsync(i => i.ID == id);
         if (instructor == null)
         {
             return NotFound();
         }
+        PopulateAssignmentCourseData(instructor);
         return View(instructor);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,HireDate,FullName,CourseAssignments,OfficeAssignments")] Instructor instructor)
+    //public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,HireDate,FullName,CourseAssignments,OfficeAssignments")] Instructor instructor)
+    public async Task<IActionResult> Edit(int? id, string[] selectedCourses)
     {
-        if (id != instructor.ID)
+        if (id != null)
         {
             return NotFound();
         }
 
-        instructor = await _context.Instructors
+        Instructor instructor = await _context.Instructors
                                     .Include(i => i.OfficeAssignments)
                                     .FirstOrDefaultAsync(i => i.ID == id);
-
-        //if (ModelState.IsValid)
-        //{
-        //    try
-        //    {
-        //        _context.Update(instructor);
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!InstructorExists(instructor.ID))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         Task<bool> ok = TryUpdateModelAsync<Instructor>
             (
@@ -147,6 +131,8 @@ public class InstructorsController : Controller
         {
             if (String.IsNullOrWhiteSpace(instructor.OfficeAssignments?.Location))
                 instructor.OfficeAssignments = null;
+
+            UpdateInstructorCourses(selectedCourses, instructor);
             try
             {
                 await _context.SaveChangesAsync();
@@ -157,8 +143,9 @@ public class InstructorsController : Controller
                 return View(instructor);
             }
         }
+        UpdateInstructorCourses (selectedCourses, instructor);
+        PopulateAssignmentCourseData(instructor);
         return Redirect($"/instructors/Details/{instructor.ID}");
-        //return View(instructor);
     }
 
     public async Task<IActionResult> Delete(int? id)
@@ -196,4 +183,71 @@ public class InstructorsController : Controller
     {
         return _context.Instructors.Any(e => e.ID == id);
     }
+
+    void PopulateAssignmentCourseData(Instructor instructor)
+    {
+        DbSet<Course> courses = _context.Courses;
+        HashSet<int> assignedCourses = new HashSet<int>
+            (
+                instructor.CourseAssignments.Select(c => c.CourseID)
+            );
+        List<AssignedCourseData> viewModel = new List<AssignedCourseData>();
+        foreach (Course course in courses)
+        {
+            viewModel.Add
+            (
+                new AssignedCourseData
+                {
+                    CourseID = course.CourseID,
+                    Title = course.Title,
+                    Assigned = assignedCourses.Contains(course.CourseID)
+                }
+            );
+        }
+        ViewData["Courses"] = viewModel;
+    }
+
+    void UpdateInstructorCourses(string[] selectedCourses, Instructor instructor)
+    {
+        if (selectedCourses == null)
+        {
+            instructor.CourseAssignments = new List<CourseAssignment>();
+            return;
+        }
+
+        HashSet<string> selectedCoursesHS = new HashSet<string>(selectedCourses);
+        HashSet<int> instructorCoursesHS = new HashSet<int>
+        (
+            instructor.CourseAssignments.Select(c => c.Course.CourseID)
+        );
+
+        foreach (Course course in _context.Courses)
+        {
+            if (selectedCourses.Contains(course.CourseID.ToString()))
+            {
+                if (!instructorCoursesHS.Contains(course.CourseID))
+                {
+                    instructor.CourseAssignments.Add
+                    (
+                            new CourseAssignment
+                            {
+                                InstructorID = instructor.ID
+                            }
+                    );
+                }
+                else
+                {
+                    if (instructorCoursesHS.Contains(course.CourseID))
+                    {
+                        CourseAssignment courseToRemove =
+                            instructor
+                            .CourseAssignments
+                            .FirstOrDefault(i => i.CourseID == course.CourseID);
+                        _context.Remove(courseToRemove);
+                    }
+                }
+            }
+        }
+    }
+
 }
