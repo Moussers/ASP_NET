@@ -56,7 +56,7 @@
                                 {
                                     if (count++ % 3 == 0)
                                     {
-                                        @:<tr></tr>    
+                                        @:<tr></tr>  
                                     }
                                     @:<td>
                                     <input type = "checkbox"
@@ -66,12 +66,12 @@
                                             @(Html.Raw(course.Assigned ? "checked=\"checked\"" : "" ))
                                     />
                                     <label for="@course.CourseID">
-                                        @course.CourseID @course.Title
+                                        @course.CourseID 
+                                        @course.Title
                                     </label>
                                     @:</td>
                                     @* Если мы хотим вставить разметку в код, тогда мы ставим @: *@
                                 }
-                                @:</tr>
                             }
                     </table>
                 </div>

@@ -29,7 +29,7 @@ namespace ContosoUniversity.Models
         }
 
         //TODO: Navigation properties:
-        public ICollection<CourseAssignment> CourseAssignments { get; set; }
-        public OfficeAssignment OfficeAssignments { get; set; }
+        public ICollection<CourseAssignment>? CourseAssignments { get; set; }
+        public OfficeAssignment? OfficeAssignments { get; set; }
     }
 }

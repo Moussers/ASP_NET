@@ -69,19 +69,37 @@ public class InstructorsController : Controller
 
     public IActionResult Create()
     {
+        Instructor instructor = new Instructor();
+        instructor.CourseAssignments = new List<CourseAssignment>();
+        PopulateAssignmentCourseData(instructor);
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("ID,LastName,FirstName,HireDate,FullName,CourseAssignments,OfficeAssignments")] Instructor instructor)
+    public async Task<IActionResult> Create([Bind("ID,LastName,FirstName,HireDate,FullName,CourseAssignments,OfficeAssignments")] Instructor instructor,string[] selectedCourses)
     {
+        if (selectedCourses != null) 
+        {
+            instructor.CourseAssignments = new List<CourseAssignment>();
+            foreach (string course in selectedCourses) 
+            {
+                CourseAssignment courseAssignment = new CourseAssignment
+                {
+                    InstructorID = instructor.ID,
+                    CourseID = Convert.ToInt32(course)
+                };
+                instructor.CourseAssignments.Add(courseAssignment);
+            }
+        }
+
         if (ModelState.IsValid)
         {
             _context.Add(instructor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        PopulateAssignmentCourseData(instructor);
         return View(instructor);
     }
 
@@ -112,13 +130,15 @@ public class InstructorsController : Controller
     //public async Task<IActionResult> Edit(int? id, [Bind("ID,LastName,FirstName,HireDate,FullName,CourseAssignments,OfficeAssignments")] Instructor instructor)
     public async Task<IActionResult> Edit(int? id, string[] selectedCourses)
     {
-        if (id != null)
+        if (id == null)
         {
             return NotFound();
         }
 
         Instructor instructor = await _context.Instructors
                                     .Include(i => i.OfficeAssignments)
+                                    .Include(i => i.CourseAssignments)
+                                        .ThenInclude(ca => ca.Course)
                                     .FirstOrDefaultAsync(i => i.ID == id);
 
         Task<bool> ok = TryUpdateModelAsync<Instructor>
@@ -215,39 +235,17 @@ public class InstructorsController : Controller
             return;
         }
 
-        HashSet<string> selectedCoursesHS = new HashSet<string>(selectedCourses);
-        HashSet<int> instructorCoursesHS = new HashSet<int>
-        (
-            instructor.CourseAssignments.Select(c => c.Course.CourseID)
-        );
-
-        foreach (Course course in _context.Courses)
+        Course[] allCourses = _context.Courses.ToArray();
+        Course[] courses = new Course[selectedCourses.Length];
+        ICollection<CourseAssignment> courseAssignments = new List<CourseAssignment>();
+        for (int i = 0; i < courses.Length; i++) 
         {
-            if (selectedCourses.Contains(course.CourseID.ToString()))
-            {
-                if (!instructorCoursesHS.Contains(course.CourseID))
-                {
-                    instructor.CourseAssignments.Add
-                    (
-                            new CourseAssignment
-                            {
-                                InstructorID = instructor.ID
-                            }
-                    );
-                }
-                else
-                {
-                    if (instructorCoursesHS.Contains(course.CourseID))
-                    {
-                        CourseAssignment courseToRemove =
-                            instructor
-                            .CourseAssignments
-                            .FirstOrDefault(i => i.CourseID == course.CourseID);
-                        _context.Remove(courseToRemove);
-                    }
-                }
-            }
+            courses[i] = allCourses.Where(c => c.CourseID.ToString() == selectedCourses[i]).First();
+            courseAssignments.Add(new CourseAssignment { CourseID = courses[i].CourseID, InstructorID = instructor.ID});
+            //courseAssignments[i] = new CourseAssignment { CourseID = allCourses[i].CourseID, InstructorID = instructor.ID };
         }
+        instructor.CourseAssignments = courseAssignments;
+        return;
     }
 
 }
